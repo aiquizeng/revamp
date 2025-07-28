@@ -27,36 +27,40 @@ const About = () => {
 
   const team = [
     {
-      name: 'Alex Rodriguez',
-      role: 'CEO & Co-Founder',
-      image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop&crop=face',
-      bio: '15+ years in enterprise software development and digital transformation leadership.'
+      name: 'Ahmad Zain',
+      role: 'CEO & Founder',
+      image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop&crop=face&auto=format&q=80',
+      bio: '10+ years leading digital transformation initiatives for SMEs and enterprises across Malaysia and Southeast Asia.',
+      linkedin: 'https://linkedin.com/in/ahmadzain-digicinta'
     },
     {
-      name: 'Sarah Kim',
-      role: 'CTO & Co-Founder',
-      image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop&crop=face',
-      bio: 'AI/ML expert with PhD in Computer Science and extensive experience in enterprise AI solutions.'
+      name: 'Dr. Priya Sharma',
+      role: 'Chief Technology Officer',
+      image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop&crop=face&auto=format&q=80',
+      bio: 'Former Google AI researcher with PhD in Machine Learning. Specializes in enterprise AI implementation and automation.',
+      linkedin: 'https://linkedin.com/in/priya-sharma-cto'
     },
     {
-      name: 'Michael Thompson',
+      name: 'Marcus Chen',
       role: 'Head of Cybersecurity',
-      image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop&crop=face',
-      bio: 'Former cybersecurity consultant with 12+ years protecting enterprise infrastructure.'
+      image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop&crop=face&auto=format&q=80',
+      bio: 'CISSP certified with 12+ years securing Fortune 500 companies. Previously at Deloitte Cyber Risk Services.',
+      linkedin: 'https://linkedin.com/in/marcus-chen-security'
     },
     {
-      name: 'Emily Chen',
-      role: 'Head of Strategy',
-      image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop&crop=face',
-      bio: 'Digital transformation strategist with MBA and track record of successful business transformations.'
+      name: 'Fatima Al-Rashid',
+      role: 'Director of Strategy',
+      image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop&crop=face&auto=format&q=80',
+      bio: 'McKinsey alumna with MBA from INSEAD. Leads digital strategy consulting for mid-market and enterprise clients.',
+      linkedin: 'https://linkedin.com/in/fatima-alrashid-strategy'
     }
   ]
 
   const stats = [
-    { number: '500+', label: 'Projects Completed' },
-    { number: '98%', label: 'Client Satisfaction' },
-    { number: '50+', label: 'Team Members' },
-    { number: '5', label: 'Years of Excellence' }
+    { number: '200+', label: 'Projects Delivered' },
+    { number: '94%', label: 'Client Retention Rate' },
+    { number: '25+', label: 'Team Specialists' },
+    { number: '4', label: 'Years of Impact' }
   ]
 
   return (
@@ -79,22 +83,25 @@ const About = () => {
             </h2>
             <div className="space-y-4 text-secondary-600 leading-relaxed">
               <p>
-                Founded in 2019, DigiCinta emerged from a simple yet powerful vision: 
-                to bridge the gap between innovative technology and practical business solutions. 
-                Our founders, with combined decades of experience in enterprise software 
-                and digital transformation, recognized the need for a consultancy that could 
-                truly understand both technical possibilities and business realities.
+                Founded in 2020 during the global digital acceleration, DigiCinta emerged from 
+                a team of senior consultants who witnessed firsthand how traditional businesses 
+                struggled with rapid digitalization. With backgrounds from McKinsey, Google, 
+                and Deloitte, our founders combined strategy expertise with deep technical knowledge 
+                to create a consultancy that truly bridges business and technology.
               </p>
               <p>
-                What started as a small team of developers has grown into a comprehensive 
-                digital solutions provider, serving clients from startups to Fortune 500 companies. 
-                We've helped organizations across various industries harness the power of AI, 
-                strengthen their cybersecurity posture, and execute successful digital transformations.
+                Starting with three consultants in Kuala Lumpur, we've grown to a distributed team 
+                of 25+ specialists serving clients across APAC and beyond. Our early wins with 
+                manufacturing automation and e-commerce platforms established our reputation, 
+                leading to partnerships with mid-market companies and Fortune 1000 enterprises 
+                seeking practical AI implementation and digital transformation.
               </p>
               <p>
-                Today, DigiCinta stands as a trusted partner for businesses seeking to navigate 
-                the complex digital landscape. Our success is measured not just in projects delivered, 
-                but in the long-term growth and success of our clients.
+                Today, DigiCinta is recognized for delivering measurable ROI through technology. 
+                Our clients typically see 25-40% operational efficiency improvements within 
+                6 months. We've completed over 200 projects, from AI-powered customer service 
+                bots to comprehensive cybersecurity overhauls, always focusing on sustainable, 
+                long-term business impact.
               </p>
             </div>
           </div>

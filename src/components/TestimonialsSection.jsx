@@ -8,48 +8,48 @@ const TestimonialsSection = () => {
 
   const testimonials = [
     {
-      name: 'Sarah Johnson',
-      role: 'CTO, TechCorp',
-      company: 'TechCorp Solutions',
-      content: 'DigiCinta transformed our entire digital infrastructure. Their AI solutions increased our operational efficiency by 60% and significantly improved our customer satisfaction scores.',
+      name: 'Datuk Seri Lim Wei Hoong',
+      role: 'CEO, MalayTech Industries',
+      company: 'MalayTech Industries Sdn Bhd',
+      content: 'DigiCinta delivered our manufacturing automation project 3 weeks ahead of schedule. The ROI was evident within 4 months - our production efficiency increased by 42% while reducing operational costs significantly.',
       rating: 5,
-      avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face'
+      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face&auto=format&q=80'
     },
     {
-      name: 'Michael Chen',
-      role: 'CEO, InnovateLab',
-      company: 'InnovateLab Inc.',
-      content: 'The cybersecurity audit and implementation by DigiCinta was exceptional. They identified critical vulnerabilities and provided comprehensive solutions that secured our entire network.',
+      name: 'Priya Nair',
+      role: 'Head of Digital, SingHealth Group',
+      company: 'SingHealth Group',
+      content: 'Their healthcare AI solution transformed our patient triage system. We now process 60% more patients efficiently while maintaining the highest safety standards. Truly exceptional work.',
       rating: 5,
-      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face'
+      avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face&auto=format&q=80'
     },
     {
-      name: 'Emily Rodriguez',
-      role: 'Director of Operations, HealthTech',
-      company: 'HealthTech Solutions',
-      content: 'Their custom healthcare platform exceeded our expectations. The HIPAA-compliant system streamlined our operations and improved patient data management significantly.',
+      name: 'James Tan',
+      role: 'CTO, Grab Financial Group',
+      company: 'Grab Financial Group',
+      content: 'DigiCinta\'s cybersecurity audit uncovered vulnerabilities we didn\'t know existed. Their comprehensive security framework has protected us from multiple threat attempts. Investment well worth it.',
       rating: 5,
-      avatar: 'https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=100&h=100&fit=crop&crop=face'
+      avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=100&h=100&fit=crop&crop=face&auto=format&q=80'
     },
     {
-      name: 'David Kim',
-      role: 'VP of Technology, RetailPro',
-      company: 'RetailPro Enterprise',
-      content: 'DigiCinta\'s e-commerce AI assistant revolutionized our customer service. The 40% increase in satisfaction and 60% reduction in support tickets speaks volumes.',
+      name: 'Maria Santos',
+      role: 'Digital Director, Ayala Corporation',
+      company: 'Ayala Corporation',
+      content: 'The AI customer service bot they built handles 80% of our inquiries automatically. Customer satisfaction increased from 7.2 to 8.9/10, and our support costs dropped by 35%. Outstanding results.',
       rating: 5,
-      avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=100&h=100&fit=crop&crop=face'
+      avatar: 'https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=100&h=100&fit=crop&crop=face&auto=format&q=80'
     }
   ]
 
   const clientLogos = [
-    { name: 'TechCorp', logo: '🏢' },
-    { name: 'InnovateLab', logo: '🔬' },
-    { name: 'HealthTech', logo: '🏥' },
-    { name: 'RetailPro', logo: '🛍️' },
-    { name: 'FinanceFirst', logo: '💰' },
-    { name: 'EduTech', logo: '🎓' },
-    { name: 'ManufacturePlus', logo: '🏭' },
-    { name: 'StartupHub', logo: '🚀' }
+    { name: 'MalayTech', logo: '🏭' },
+    { name: 'SingHealth', logo: '🏥' },
+    { name: 'Grab Financial', logo: '🚗' },
+    { name: 'Ayala Corp', logo: '🏢' },
+    { name: 'DBS Bank', logo: '🏦' },
+    { name: 'Genting Group', logo: '🎲' },
+    { name: 'AirAsia', logo: '✈️' },
+    { name: 'Shopee', logo: '🛒' }
   ]
 
   useEffect(() => {

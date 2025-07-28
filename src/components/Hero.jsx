@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 
 const Hero = () => {
   const [isVisible, setIsVisible] = useState(false)
-  const [backgroundImage, setBackgroundImage] = useState('https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=1920&h=1080&fit=crop&crop=center')
+  const [backgroundImage, setBackgroundImage] = useState('https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=1920&h=1080&fit=crop&crop=center&auto=format&q=80')
 
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 200)
@@ -13,7 +13,7 @@ const Hero = () => {
   }, [])
 
   const handleImageError = () => {
-    setBackgroundImage('https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1920&h=1080&fit=crop&crop=center')
+    setBackgroundImage('https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1920&h=1080&fit=crop&crop=center&auto=format&q=80')
   }
 
   return (
@@ -86,16 +86,16 @@ const Hero = () => {
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}>
             <div className="bg-white/15 backdrop-blur-md border border-white/30 rounded-xl shadow-2xl p-2.5 xs:p-3 sm:p-4 md:p-6 text-center hover:bg-white/20 transition-all duration-300">
-              <div className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-bold text-white mb-1 sm:mb-2 drop-shadow-lg">500+</div>
-              <div className="text-white/90 text-xs sm:text-sm font-medium">Projects Completed</div>
+              <div className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-bold text-white mb-1 sm:mb-2 drop-shadow-lg">200+</div>
+              <div className="text-white/90 text-xs sm:text-sm font-medium">Projects Delivered</div>
             </div>
             <div className="bg-white/15 backdrop-blur-md border border-white/30 rounded-xl shadow-2xl p-2.5 xs:p-3 sm:p-4 md:p-6 text-center hover:bg-white/20 transition-all duration-300">
-              <div className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-bold text-white mb-1 sm:mb-2 drop-shadow-lg">98%</div>
-              <div className="text-white/90 text-xs sm:text-sm font-medium">Client Satisfaction</div>
+              <div className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-bold text-white mb-1 sm:mb-2 drop-shadow-lg">35%</div>
+              <div className="text-white/90 text-xs sm:text-sm font-medium">Avg ROI Increase</div>
             </div>
             <div className="bg-white/15 backdrop-blur-md border border-white/30 rounded-xl shadow-2xl p-2.5 xs:p-3 sm:p-4 md:p-6 text-center hover:bg-white/20 transition-all duration-300">
-              <div className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-bold text-white mb-1 sm:mb-2 drop-shadow-lg">24/7</div>
-              <div className="text-white/90 text-xs sm:text-sm font-medium">Support Available</div>
+              <div className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-bold text-white mb-1 sm:mb-2 drop-shadow-lg">APAC</div>
+              <div className="text-white/90 text-xs sm:text-sm font-medium">Regional Presence</div>
             </div>
           </div>
         </div>
