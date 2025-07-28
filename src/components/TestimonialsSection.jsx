@@ -3,7 +3,7 @@ import { ChevronLeft, ChevronRight, Star, Quote } from 'lucide-react'
 import { useScrollAnimation } from '../hooks/useScrollAnimation'
 
 const TestimonialsSection = () => {
-  const [ref, isVisible] = useScrollAnimation(0.2)
+  const [ref, isVisible] = useScrollAnimation(0.1)
   const [currentTestimonial, setCurrentTestimonial] = useState(0)
 
   const testimonials = [
@@ -69,12 +69,10 @@ const TestimonialsSection = () => {
   }
 
   return (
-    <section ref={ref} className="section-spacing bg-white">
-      <div className="section-container">
+    <section ref={ref} className="section-spacing bg-gradient-to-br from-secondary-50 to-primary-50 overflow-hidden">
+      <div className="section-container relative">
         {/* Section Header */}
-        <div className={`text-center header-spacing transition-all duration-1000 ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-        }`}>
+        <div className={`text-center header-spacing transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <h2 className="text-4xl md:text-5xl font-bold text-secondary-900 mb-6">
             What Our <span className="text-gradient">Clients Say</span>
           </h2>
@@ -84,45 +82,43 @@ const TestimonialsSection = () => {
         </div>
 
         {/* Testimonials Carousel */}
-        <div className={`mb-20 transition-all duration-1000 delay-300 ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-        }`}>
+        <div className={`mb-8 sm:mb-12 md:mb-16 lg:mb-20 transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
           <div className="relative max-w-4xl mx-auto">
-            <div className="modern-card p-4 xs:p-6 sm:p-8 lg:p-12 relative overflow-hidden">
+            <div className="modern-card p-3 xs:p-4 sm:p-6 md:p-8 lg:p-12 relative overflow-hidden">
               {/* Quote Icon */}
-              <div className="absolute top-4 xs:top-6 right-4 xs:right-6 opacity-10">
-                <Quote size={60} className="xs:w-20 xs:h-20 text-primary-600" />
+              <div className="absolute top-2 xs:top-3 sm:top-4 md:top-6 right-2 xs:right-3 sm:right-4 md:right-6 opacity-10">
+                <Quote size={24} className="w-6 h-6 xs:w-8 xs:h-8 sm:w-12 sm:h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 text-primary-600" />
               </div>
 
               <div className="relative z-10">
                 {/* Rating Stars */}
-                <div className="flex justify-center mb-4 sm:mb-6">
+                <div className="flex justify-center mb-3 xs:mb-4 sm:mb-6">
                   {[...Array(testimonials[currentTestimonial].rating)].map((_, i) => (
                     <Star 
                       key={i} 
-                      size={18} 
-                      className="xs:w-5 xs:h-5 sm:w-6 sm:h-6 text-yellow-500 fill-current mr-1" 
+                      size={16} 
+                      className="w-4 h-4 xs:w-5 xs:h-5 sm:w-6 sm:h-6 text-yellow-500 fill-current mr-1" 
                     />
                   ))}
                 </div>
 
                 {/* Testimonial Content */}
-                <blockquote className="text-base xs:text-lg sm:text-xl md:text-2xl text-secondary-700 text-center mb-6 sm:mb-8 leading-relaxed font-light italic px-2">
+                <blockquote className="text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl text-secondary-700 text-center mb-4 xs:mb-6 sm:mb-8 leading-relaxed font-light italic px-1 xs:px-2">
                   "{testimonials[currentTestimonial].content}"
                 </blockquote>
 
                 {/* Author Info */}
-                <div className="flex flex-col xs:flex-row items-center justify-center space-y-3 xs:space-y-0 xs:space-x-4">
+                <div className="flex flex-col xs:flex-row items-center justify-center space-y-2 xs:space-y-0 xs:space-x-3 sm:space-x-4">
                   <img
                     src={testimonials[currentTestimonial].avatar}
                     alt={testimonials[currentTestimonial].name}
-                    className="w-12 xs:w-14 sm:w-16 h-12 xs:h-14 sm:h-16 rounded-full border-2 xs:border-4 border-primary-100"
+                    className="w-10 xs:w-12 sm:w-14 md:w-16 h-10 xs:h-12 sm:h-14 md:h-16 rounded-full border-2 xs:border-3 sm:border-4 border-primary-100"
                   />
                   <div className="text-center xs:text-left">
-                    <div className="font-bold text-secondary-900 text-base sm:text-lg">
+                    <div className="font-bold text-secondary-900 text-sm xs:text-base sm:text-lg">
                       {testimonials[currentTestimonial].name}
                     </div>
-                    <div className="text-secondary-600 text-sm sm:text-base">
+                    <div className="text-secondary-600 text-xs xs:text-sm sm:text-base">
                       {testimonials[currentTestimonial].role}
                     </div>
                     <div className="text-primary-600 font-medium text-xs sm:text-sm">
@@ -136,28 +132,31 @@ const TestimonialsSection = () => {
             {/* Navigation Buttons */}
             <button
               onClick={prevTestimonial}
-              className="absolute left-1 xs:left-2 sm:left-4 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full p-1.5 xs:p-2 sm:p-3 hover:bg-primary-50 transition-all duration-300 hover:scale-110 border border-primary-100"
+              className="absolute left-0 xs:left-1 sm:left-2 md:left-4 lg:left-6 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full p-1.5 xs:p-2 sm:p-3 md:p-4 hover:bg-primary-50 transition-all duration-300 hover:scale-110 border border-primary-100 w-8 h-8 xs:w-10 xs:h-10 sm:w-12 sm:h-12 flex items-center justify-center z-30"
+              aria-label="Previous testimonial"
             >
-              <ChevronLeft size={16} className="xs:w-5 xs:h-5 sm:w-6 sm:h-6 text-primary-600" />
+              <ChevronLeft size={16} className="w-4 h-4 xs:w-5 xs:h-5 sm:w-6 sm:h-6 text-primary-600" />
             </button>
             <button
               onClick={nextTestimonial}
-              className="absolute right-1 xs:right-2 sm:right-4 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full p-1.5 xs:p-2 sm:p-3 hover:bg-primary-50 transition-all duration-300 hover:scale-110 border border-primary-100"
+              className="absolute right-0 xs:right-1 sm:right-2 md:right-4 lg:right-6 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full p-1.5 xs:p-2 sm:p-3 md:p-4 hover:bg-primary-50 transition-all duration-300 hover:scale-110 border border-primary-100 w-8 h-8 xs:w-10 xs:h-10 sm:w-12 sm:h-12 flex items-center justify-center z-30"
+              aria-label="Next testimonial"
             >
-              <ChevronRight size={16} className="xs:w-5 xs:h-5 sm:w-6 sm:h-6 text-primary-600" />
+              <ChevronRight size={16} className="w-4 h-4 xs:w-5 xs:h-5 sm:w-6 sm:h-6 text-primary-600" />
             </button>
 
             {/* Dots Indicator */}
-            <div className="flex justify-center mt-6 space-x-2">
+            <div className="flex justify-center mt-4 xs:mt-5 sm:mt-6 space-x-2 xs:space-x-3">
               {testimonials.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrentTestimonial(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                  className={`w-2 h-2 xs:w-3 xs:h-3 sm:w-4 sm:h-4 rounded-full transition-all duration-300 ${
                     index === currentTestimonial
                       ? 'bg-primary-600 scale-125'
                       : 'bg-secondary-300 hover:bg-primary-300'
                   }`}
+                  aria-label={`Go to testimonial ${index + 1}`}
                 />
               ))}
             </div>
@@ -165,10 +164,8 @@ const TestimonialsSection = () => {
         </div>
 
         {/* Client Logos */}
-        <div className={`transition-all duration-1000 delay-600 ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-        }`}>
-          <h3 className="text-2xl font-bold text-center text-secondary-900 mb-10">
+        <div className={`transition-all duration-1000 delay-600 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
+          <h3 className="text-lg xs:text-xl sm:text-2xl font-bold text-center text-secondary-900 mb-6 xs:mb-8 sm:mb-10">
             Trusted by Industry Leaders
           </h3>
           
@@ -176,35 +173,17 @@ const TestimonialsSection = () => {
             {clientLogos.map((client, index) => (
               <div
                 key={client.name}
-                className="group flex flex-col items-center justify-center p-3 xs:p-4 sm:p-6 bg-secondary-50 rounded-lg sm:rounded-xl hover:bg-primary-50 transition-all duration-300 hover:scale-105 cursor-pointer border border-transparent hover:border-primary-200"
+                className="group flex flex-col items-center justify-center p-2 xs:p-3 sm:p-4 md:p-5 lg:p-6 bg-secondary-50 rounded-md xs:rounded-lg sm:rounded-xl hover:bg-primary-50 transition-all duration-300 hover:scale-105 cursor-pointer border border-transparent hover:border-primary-200 min-h-[60px] xs:min-h-[70px] sm:min-h-[80px] md:min-h-[90px] lg:min-h-[100px]"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
-                <div className="text-2xl xs:text-3xl sm:text-4xl mb-1 xs:mb-2 group-hover:scale-110 transition-transform duration-300">
+                <div className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl mb-1 xs:mb-2 group-hover:scale-110 transition-transform duration-300">
                   {client.logo}
                 </div>
-                <div className="text-xs font-medium text-secondary-600 group-hover:text-primary-600 transition-colors text-center">
+                <div className="text-xs font-medium text-secondary-600 group-hover:text-primary-600 transition-colors text-center leading-tight">
                   {client.name}
                 </div>
               </div>
             ))}
-          </div>
-        </div>
-
-        {/* CTA Section */}
-        <div className={`text-center mt-16 transition-all duration-1000 delay-800 ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-        }`}>
-          <div className="bg-gradient-to-r from-primary-50 to-primary-100 rounded-2xl p-8">
-            <h3 className="text-2xl font-bold text-secondary-900 mb-4">
-              Ready to Join Our Success Stories?
-            </h3>
-            <p className="text-secondary-600 mb-6 max-w-2xl mx-auto">
-              Let's discuss how we can transform your business with our proven digital solutions.
-            </p>
-            <button className="btn-primary group">
-              <span>Get Your Free Consultation</span>
-              <ChevronRight size={20} className="ml-2 flex-shrink-0 transition-transform duration-300 group-hover:translate-x-2" />
-            </button>
           </div>
         </div>
       </div>

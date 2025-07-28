@@ -106,50 +106,50 @@ const CaseStudiesPreview = () => {
                 </div>
 
                 {/* Content Section */}
-                <div className="lg:w-1/2 p-4 xs:p-6 sm:p-8 lg:p-12">
-                  <div className="mb-4 sm:mb-6">
-                    <h3 className="text-xl xs:text-2xl sm:text-3xl font-bold text-secondary-900 mb-2">
+                <div className="lg:w-1/2 p-3 xs:p-4 sm:p-6 md:p-8 lg:p-12">
+                  <div className="mb-3 xs:mb-4 sm:mb-6">
+                    <h3 className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-bold text-secondary-900 mb-1 xs:mb-2 leading-tight">
                       {study.title}
                     </h3>
-                    <p className="text-primary-600 font-semibold text-base sm:text-lg">
+                    <p className="text-primary-600 font-semibold text-sm xs:text-base sm:text-lg">
                       {study.client}
                     </p>
                   </div>
 
                   {/* Challenge & Solution */}
-                  <div className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
+                  <div className="space-y-2 xs:space-y-3 sm:space-y-4 mb-4 xs:mb-6 sm:mb-8">
                     <div>
-                      <h4 className="font-bold text-secondary-800 mb-1 sm:mb-2 text-sm sm:text-base">Challenge:</h4>
-                      <p className="text-secondary-600 leading-relaxed text-sm sm:text-base">
+                      <h4 className="font-bold text-secondary-800 mb-1 text-xs xs:text-sm sm:text-base">Challenge:</h4>
+                      <p className="text-secondary-600 leading-relaxed text-xs xs:text-sm sm:text-base">
                         {study.challenge}
                       </p>
                     </div>
                     <div>
-                      <h4 className="font-bold text-secondary-800 mb-1 sm:mb-2 text-sm sm:text-base">Solution:</h4>
-                      <p className="text-secondary-600 leading-relaxed text-sm sm:text-base">
+                      <h4 className="font-bold text-secondary-800 mb-1 text-xs xs:text-sm sm:text-base">Solution:</h4>
+                      <p className="text-secondary-600 leading-relaxed text-xs xs:text-sm sm:text-base">
                         {study.solution}
                       </p>
                     </div>
                   </div>
 
                   {/* Results */}
-                  <div className="mb-6 sm:mb-8">
-                    <h4 className="font-bold text-secondary-800 mb-3 sm:mb-4 text-sm sm:text-base">Key Results:</h4>
-                    <div className="grid grid-cols-1 xs:grid-cols-3 gap-3 sm:gap-4">
+                  <div className="mb-4 xs:mb-6 sm:mb-8">
+                    <h4 className="font-bold text-secondary-800 mb-2 xs:mb-3 sm:mb-4 text-xs xs:text-sm sm:text-base">Key Results:</h4>
+                    <div className="grid grid-cols-1 xs:grid-cols-3 gap-2 xs:gap-3 sm:gap-4">
                       {study.results.map((result, resultIndex) => {
                         const IconComponent = result.icon
                         return (
                           <div 
                             key={resultIndex}
-                            className="text-center p-3 sm:p-4 bg-white rounded-lg sm:rounded-xl border border-primary-100 hover:border-primary-300 transition-all duration-300 hover:shadow-md"
+                            className="text-center p-2 xs:p-3 sm:p-4 bg-white rounded-lg sm:rounded-xl border border-primary-100 hover:border-primary-300 transition-all duration-300 hover:shadow-md"
                           >
-                            <div className={`inline-flex items-center justify-center w-10 sm:w-12 h-10 sm:h-12 bg-gradient-to-r ${study.color} rounded-lg sm:rounded-xl mb-2`}>
-                              <IconComponent className="text-white" size={16} />
+                            <div className={`inline-flex items-center justify-center w-8 xs:w-10 sm:w-12 h-8 xs:h-10 sm:h-12 bg-gradient-to-r ${study.color} rounded-lg sm:rounded-xl mb-1 xs:mb-2`}>
+                              <IconComponent className="text-white" size={14} />
                             </div>
-                            <div className="text-lg sm:text-2xl font-bold text-secondary-900">
+                            <div className="text-base xs:text-lg sm:text-xl md:text-2xl font-bold text-secondary-900">
                               {result.metric}
                             </div>
-                            <div className="text-xs sm:text-sm text-secondary-600">
+                            <div className="text-xs leading-tight text-secondary-600">
                               {result.label}
                             </div>
                           </div>
@@ -159,13 +159,13 @@ const CaseStudiesPreview = () => {
                   </div>
 
                   {/* Technologies */}
-                  <div className="mb-4 sm:mb-6">
-                    <h4 className="font-bold text-secondary-800 mb-2 sm:mb-3 text-sm sm:text-base">Technologies Used:</h4>
-                    <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                  <div className="mb-3 xs:mb-4 sm:mb-6">
+                    <h4 className="font-bold text-secondary-800 mb-1 xs:mb-2 sm:mb-3 text-xs xs:text-sm sm:text-base">Technologies Used:</h4>
+                    <div className="flex flex-wrap gap-1 xs:gap-1.5 sm:gap-2">
                       {study.tags.map((tag, tagIndex) => (
                         <span
                           key={tagIndex}
-                          className="px-2 sm:px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-xs sm:text-sm font-medium"
+                          className="px-1.5 xs:px-2 sm:px-3 py-0.5 xs:py-1 bg-primary-100 text-primary-700 rounded-full text-xs font-medium"
                         >
                           {tag}
                         </span>
@@ -174,10 +174,10 @@ const CaseStudiesPreview = () => {
                   </div>
 
                   {/* CTA */}
-                  <button className="btn-ghost group text-sm sm:text-base">
+                  <button className="btn-ghost group text-xs xs:text-sm sm:text-base">
                     <span className="hidden xs:inline">Read Full Case Study</span>
                     <span className="xs:hidden">Read More</span>
-                    <ArrowRight size={16} className="sm:w-5 sm:h-5 ml-2 flex-shrink-0 transition-transform duration-300 group-hover:translate-x-2" />
+                    <ArrowRight size={14} className="xs:w-4 xs:h-4 sm:w-5 sm:h-5 ml-1 xs:ml-2 flex-shrink-0 transition-transform duration-300 group-hover:translate-x-2" />
                   </button>
                 </div>
               </div>
@@ -186,23 +186,23 @@ const CaseStudiesPreview = () => {
         </div>
 
         {/* Bottom CTA */}
-        <div className={`text-center mt-6 sm:mt-8 md:mt-12 transition-all duration-1000 delay-600 ${
+        <div className={`text-center mt-4 xs:mt-6 sm:mt-8 md:mt-12 transition-all duration-1000 delay-600 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
         }`}>
-          <div className="bg-gradient-to-r from-primary-600 to-primary-800 rounded-xl sm:rounded-2xl p-4 xs:p-6 sm:p-8 lg:p-12 text-white">
-            <h3 className="text-xl xs:text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">
+          <div className="bg-gradient-to-r from-primary-600 to-primary-800 rounded-lg xs:rounded-xl sm:rounded-2xl p-3 xs:p-4 sm:p-6 md:p-8 lg:p-12 text-white">
+            <h3 className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-bold mb-2 xs:mb-3 sm:mb-4 leading-tight">
               Ready to Create Your Success Story?
             </h3>
-            <p className="text-base xs:text-lg sm:text-xl text-white/90 mb-6 sm:mb-8 max-w-2xl mx-auto">
+            <p className="text-sm xs:text-base sm:text-lg md:text-xl text-white/90 mb-4 xs:mb-6 sm:mb-8 max-w-2xl mx-auto leading-relaxed">
               Join hundreds of businesses that have transformed their operations with our digital solutions.
             </p>
-            <div className="flex flex-col xs:flex-row gap-3 sm:gap-4 justify-center">
-              <button className="btn-secondary text-sm sm:text-base px-4 sm:px-6 py-3 sm:py-4">
+            <div className="flex flex-col xs:flex-row gap-2 xs:gap-3 sm:gap-4 justify-center">
+              <button className="btn-secondary text-xs xs:text-sm sm:text-base px-3 xs:px-4 sm:px-6 py-2 xs:py-3 sm:py-4">
                 <span className="hidden xs:inline">View All Case Studies</span>
                 <span className="xs:hidden">View All Cases</span>
-                <ArrowRight size={16} className="sm:w-5 sm:h-5 ml-2 flex-shrink-0" />
+                <ArrowRight size={14} className="xs:w-4 xs:h-4 sm:w-5 sm:h-5 ml-1 xs:ml-2 flex-shrink-0" />
               </button>
-              <button className="inline-flex items-center justify-center whitespace-nowrap bg-white/10 backdrop-blur-sm text-white border border-white/20 px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg sm:rounded-xl font-semibold hover:bg-white/20 transition-all duration-300 hover:scale-105 text-sm sm:text-base">
+              <button className="inline-flex items-center justify-center whitespace-nowrap bg-white/10 backdrop-blur-sm text-white border border-white/20 px-3 xs:px-4 sm:px-6 md:px-8 py-2 xs:py-3 sm:py-4 rounded-lg sm:rounded-xl font-semibold hover:bg-white/20 transition-all duration-300 hover:scale-105 text-xs xs:text-sm sm:text-base">
                 <span>Start Your Project</span>
               </button>
             </div>

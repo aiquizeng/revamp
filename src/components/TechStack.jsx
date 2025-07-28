@@ -106,70 +106,70 @@ const TechStack = () => {
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
         }`}>
           {/* Category Tabs */}
-          <div className="flex flex-wrap justify-center gap-2 sm:gap-3 md:gap-4 mb-6 sm:mb-8 px-2">
+          <div className="flex flex-wrap justify-center gap-1 xs:gap-2 sm:gap-3 md:gap-4 mb-4 xs:mb-6 sm:mb-8 px-1 xs:px-2">
             {Object.entries(categories).map(([key, category]) => {
               const IconComponent = category.icon
               return (
                 <button
                   key={key}
                   onClick={() => setActiveCategory(key)}
-                  className={`flex items-center space-x-1 xs:space-x-2 sm:space-x-3 px-2 xs:px-3 sm:px-4 md:px-6 py-2 xs:py-3 sm:py-4 rounded-lg sm:rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 text-xs xs:text-sm sm:text-base whitespace-nowrap ${
+                  className={`flex items-center space-x-1 xs:space-x-2 sm:space-x-3 px-1.5 xs:px-2 sm:px-3 md:px-4 lg:px-6 py-1.5 xs:py-2 sm:py-3 md:py-4 rounded-md xs:rounded-lg sm:rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 text-xs sm:text-sm md:text-base whitespace-nowrap ${
                     activeCategory === key
                       ? 'bg-primary-600 text-white shadow-xl shadow-primary-600/25'
                       : 'bg-white text-secondary-700 hover:bg-primary-50 shadow-lg border border-primary-100'
                   }`}
                 >
-                  <IconComponent size={14} className="xs:w-4 xs:h-4 sm:w-5 sm:h-5" />
-                  <span className="hidden xs:inline">{category.title}</span>
-                  <span className="xs:hidden">{category.title.split(' ')[0]}</span>
+                  <IconComponent size={12} className="w-3 h-3 xs:w-4 xs:h-4 sm:w-5 sm:h-5" />
+                  <span className="hidden sm:inline">{category.title}</span>
+                  <span className="sm:hidden">{category.title.split(' ')[0]}</span>
                 </button>
               )
             })}
           </div>
 
           {/* Active Category Content */}
-          <div className="modern-card p-3 xs:p-4 sm:p-6 md:p-8 lg:p-12">
-            <div className="text-center mb-6 sm:mb-8 md:mb-10">
-              <div className={`inline-flex items-center justify-center w-12 xs:w-14 sm:w-16 h-12 xs:h-14 sm:h-16 bg-gradient-to-r from-primary-500 to-primary-700 rounded-xl sm:rounded-2xl mb-3 sm:mb-4 ${
+          <div className="modern-card p-2 xs:p-3 sm:p-4 md:p-6 lg:p-8 xl:p-12">
+            <div className="text-center mb-4 xs:mb-6 sm:mb-8 md:mb-10">
+              <div className={`inline-flex items-center justify-center w-10 xs:w-12 sm:w-14 md:w-16 h-10 xs:h-12 sm:h-14 md:h-16 bg-gradient-to-r from-primary-500 to-primary-700 rounded-lg xs:rounded-xl sm:rounded-2xl mb-2 xs:mb-3 sm:mb-4 ${
                 isVisible ? 'animate-bounce-slow' : ''
               }`}>
                 {React.createElement(categories[activeCategory].icon, { 
-                  size: 20, 
-                  className: "text-white xs:w-6 xs:h-6 sm:w-7 sm:h-7" 
+                  size: 16, 
+                  className: "text-white w-4 h-4 xs:w-5 xs:h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" 
                 })}
               </div>
-              <h3 className="text-xl xs:text-2xl sm:text-3xl font-bold text-secondary-900 mb-3 sm:mb-4">
+              <h3 className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-bold text-secondary-900 mb-2 xs:mb-3 sm:mb-4 leading-tight">
                 {categories[activeCategory].title}
               </h3>
-              <p className="text-sm xs:text-base sm:text-lg text-secondary-600 max-w-2xl mx-auto px-2">
+              <p className="text-xs xs:text-sm sm:text-base md:text-lg text-secondary-600 max-w-2xl mx-auto px-1 xs:px-2 leading-relaxed">
                 {categories[activeCategory].description}
               </p>
             </div>
 
             {/* Technology Grid */}
-            <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+            <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-2 xs:gap-3 sm:gap-4 md:gap-6">
               {categories[activeCategory].technologies.map((tech, index) => (
                 <div
                   key={tech.name}
-                  className="group bg-white p-3 xs:p-4 sm:p-6 rounded-lg sm:rounded-xl border border-primary-100 hover:border-primary-300 transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1"
+                  className="group bg-white p-2 xs:p-3 sm:p-4 md:p-6 rounded-md xs:rounded-lg sm:rounded-xl border border-primary-100 hover:border-primary-300 transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  <div className="flex items-center space-x-2 xs:space-x-3 sm:space-x-4 mb-3 sm:mb-4">
-                    <span className="text-xl xs:text-2xl sm:text-3xl">{tech.logo}</span>
+                  <div className="flex items-center space-x-2 xs:space-x-3 sm:space-x-4 mb-2 xs:mb-3 sm:mb-4">
+                    <span className="text-lg xs:text-xl sm:text-2xl md:text-3xl">{tech.logo}</span>
                     <div className="min-w-0 flex-1">
-                      <h4 className="font-bold text-secondary-900 group-hover:text-primary-600 transition-colors text-sm sm:text-base truncate">
+                      <h4 className="font-bold text-secondary-900 group-hover:text-primary-600 transition-colors text-xs xs:text-sm sm:text-base truncate">
                         {tech.name}
                       </h4>
-                      <span className="text-xs sm:text-sm text-secondary-500">
+                      <span className="text-xs text-secondary-500">
                         Expertise: {tech.level}%
                       </span>
                     </div>
                   </div>
                   
                   {/* Progress Bar */}
-                  <div className="w-full bg-secondary-200 rounded-full h-1.5 sm:h-2">
+                  <div className="w-full bg-secondary-200 rounded-full h-1 xs:h-1.5 sm:h-2">
                     <div 
-                      className="bg-gradient-to-r from-primary-500 to-primary-700 h-1.5 sm:h-2 rounded-full transition-all duration-1000 ease-out"
+                      className="bg-gradient-to-r from-primary-500 to-primary-700 h-1 xs:h-1.5 sm:h-2 rounded-full transition-all duration-1000 ease-out"
                       style={{ 
                         width: isVisible ? `${tech.level}%` : '0%',
                         transitionDelay: `${index * 100 + 500}ms`

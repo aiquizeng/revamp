@@ -25,8 +25,9 @@ const Hero = () => {
         className="hidden" 
         onError={handleImageError}
       />
-      {/* Modern gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary-900/90 via-primary-800/85 to-secondary-900/90"></div>
+      {/* Modern gradient overlay - stronger for better text visibility */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary-900/95 via-primary-800/90 to-secondary-900/95"></div>
+      <div className="absolute inset-0 bg-black/30"></div>
       
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
@@ -41,7 +42,7 @@ const Hero = () => {
           <div className={`mb-3 xs:mb-4 sm:mb-6 transition-all duration-1000 ${
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}>
-            <span className="inline-block px-3 sm:px-4 py-1.5 sm:py-2 bg-white/10 backdrop-blur-sm rounded-full text-xs sm:text-sm font-medium border border-white/20 mb-4 xs:mb-6 sm:mb-8">
+            <span className="inline-block px-3 sm:px-4 py-1.5 sm:py-2 bg-white/20 backdrop-blur-sm rounded-full text-xs sm:text-sm font-semibold border border-white/40 mb-4 xs:mb-6 sm:mb-8 text-white shadow-lg">
               🚀 Transforming Businesses Digitally
             </span>
           </div>
@@ -49,18 +50,18 @@ const Hero = () => {
           <h1 className={`text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black leading-[1.1] mb-4 xs:mb-6 sm:mb-8 px-1 transition-all duration-1000 ${
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}>
-            <span className="block text-white drop-shadow-2xl transition-all duration-1000 delay-200">Digital Solutions</span>
-            <span className={`text-gradient-secondary block transition-all duration-1000 delay-400 ${
+            <span className="block text-white drop-shadow-2xl transition-all duration-1000 delay-200" style={{ textShadow: '0 4px 8px rgba(0,0,0,0.5), 0 0 16px rgba(0,0,0,0.3)' }}>Digital Solutions</span>
+            <span className={`block transition-all duration-1000 delay-400 text-primary-200 font-black ${
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-            }`}>
+            }`} style={{ textShadow: '0 4px 8px rgba(0,0,0,0.6), 0 0 20px rgba(37, 99, 235, 0.4)' }}>
               That Transform
             </span>
           </h1>
           
-          <p className={`text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 mb-6 xs:mb-8 sm:mb-12 leading-relaxed max-w-4xl mx-auto font-light px-3 xs:px-4 sm:px-2 transition-all duration-1000 delay-600 ${
+          <p className={`text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl text-white mb-6 xs:mb-8 sm:mb-12 leading-relaxed max-w-4xl mx-auto font-light px-3 xs:px-4 sm:px-2 transition-all duration-1000 delay-600 ${
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-          }`}>
-            We craft <span className="font-semibold text-gradient-secondary">innovative digital experiences</span> that drive growth, engage audiences, and deliver measurable results for forward-thinking businesses.
+          }`} style={{ textShadow: '0 2px 4px rgba(0,0,0,0.6)' }}>
+            We craft <span className="font-semibold text-primary-200">innovative digital experiences</span> that drive growth, engage audiences, and deliver measurable results for forward-thinking businesses.
           </p>
             
           <div className={`flex flex-col xs:flex-row gap-3 xs:gap-4 sm:gap-6 justify-center px-3 xs:px-4 sm:px-2 transition-all duration-1000 delay-800 ${
@@ -84,17 +85,17 @@ const Hero = () => {
           <div className={`mt-6 xs:mt-8 sm:mt-12 md:mt-16 grid grid-cols-1 xs:grid-cols-3 gap-2 xs:gap-3 sm:gap-4 md:gap-8 max-w-4xl mx-auto px-3 xs:px-4 sm:px-2 transition-all duration-1000 delay-1000 ${
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}>
-            <div className="glass-card p-2.5 xs:p-3 sm:p-4 md:p-6 text-center">
-              <div className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-bold text-gradient-secondary mb-1 sm:mb-2">500+</div>
-              <div className="text-white/80 text-xs sm:text-sm">Projects Completed</div>
+            <div className="bg-white/15 backdrop-blur-md border border-white/30 rounded-xl shadow-2xl p-2.5 xs:p-3 sm:p-4 md:p-6 text-center hover:bg-white/20 transition-all duration-300">
+              <div className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-bold text-white mb-1 sm:mb-2 drop-shadow-lg">500+</div>
+              <div className="text-white/90 text-xs sm:text-sm font-medium">Projects Completed</div>
             </div>
-            <div className="glass-card p-2.5 xs:p-3 sm:p-4 md:p-6 text-center">
-              <div className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-bold text-gradient-secondary mb-1 sm:mb-2">98%</div>
-              <div className="text-white/80 text-xs sm:text-sm">Client Satisfaction</div>
+            <div className="bg-white/15 backdrop-blur-md border border-white/30 rounded-xl shadow-2xl p-2.5 xs:p-3 sm:p-4 md:p-6 text-center hover:bg-white/20 transition-all duration-300">
+              <div className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-bold text-white mb-1 sm:mb-2 drop-shadow-lg">98%</div>
+              <div className="text-white/90 text-xs sm:text-sm font-medium">Client Satisfaction</div>
             </div>
-            <div className="glass-card p-2.5 xs:p-3 sm:p-4 md:p-6 text-center">
-              <div className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-bold text-gradient-secondary mb-1 sm:mb-2">24/7</div>
-              <div className="text-white/80 text-xs sm:text-sm">Support Available</div>
+            <div className="bg-white/15 backdrop-blur-md border border-white/30 rounded-xl shadow-2xl p-2.5 xs:p-3 sm:p-4 md:p-6 text-center hover:bg-white/20 transition-all duration-300">
+              <div className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-bold text-white mb-1 sm:mb-2 drop-shadow-lg">24/7</div>
+              <div className="text-white/90 text-xs sm:text-sm font-medium">Support Available</div>
             </div>
           </div>
         </div>
