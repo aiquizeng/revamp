@@ -103,18 +103,78 @@ src/
 
 ## 🚀 Deployment
 
-### Build for Production
+### Apache2 Server Deployment (Production)
+
+The project includes automated deployment scripts for Apache2 servers:
+
+#### Full Deployment Script
+```bash
+# Make script executable (first time only)
+chmod +x deploy.sh
+
+# Deploy with full checks and optimizations
+sudo ./deploy.sh
+
+# Deploy and restart Apache
+sudo ./deploy.sh --restart-apache
+
+# Show help
+./deploy.sh --help
+```
+
+#### Quick Deployment (for updates)
+```bash
+# Make script executable (first time only)
+chmod +x quick-deploy.sh
+
+# Quick deploy for minor updates
+./quick-deploy.sh
+```
+
+### Apache2 Server Setup
+
+1. **Enable required Apache modules:**
+```bash
+sudo a2enmod rewrite
+sudo a2enmod headers
+sudo a2enmod expires
+sudo a2enmod deflate
+```
+
+2. **Create the web directory:**
+```bash
+sudo mkdir -p /var/www/html/digicinta.com
+sudo chown -R www-data:www-data /var/www/html/digicinta.com
+```
+
+3. **Restart Apache to apply modules:**
+```bash
+sudo systemctl restart apache2
+```
+
+### Deployment Features
+
+The deployment scripts include:
+- ✅ **Automated build** with error checking
+- ✅ **Backup system** (keeps last 5 deployments)
+- ✅ **Permission management** for Apache
+- ✅ **Comprehensive .htaccess** with React Router support
+- ✅ **Performance optimizations** (gzip, caching)
+- ✅ **Security headers** implementation
+- ✅ **Deployment verification** and logging
+
+### Manual Build for Other Hosting
 ```bash
 npm run build
 ```
 
-The build artifacts will be stored in the `dist/` directory, ready for deployment to any static hosting service.
+The build artifacts will be stored in the `dist/` directory.
 
-### Recommended Hosting
+### Alternative Hosting Options
 - **Vercel**: Zero-config deployment with git integration
 - **Netlify**: Continuous deployment with form handling
 - **AWS S3 + CloudFront**: Scalable static hosting
-- **GitHub Pages**: Free hosting for open source projects
+- **DigitalOcean App Platform**: Container-based hosting
 
 ## 🎨 Customization
 
