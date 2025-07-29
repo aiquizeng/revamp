@@ -188,37 +188,6 @@ restart_apache() {
     log "Deployment uses .htaccess - no Apache restart required"
 }
 
-# Deploy .htaccess for React Router
-deploy_htaccess() {
-    log "Deploying .htaccess for React Router..."
-    
-    # Check if .htaccess exists in project root
-    if [[ -f ".htaccess" ]]; then
-        if cp ".htaccess" "$APACHE_ROOT/.htaccess"; then
-            success "Deployed .htaccess from project root"
-        else
-            error "Failed to copy .htaccess to Apache directory"
-        fi
-    else
-        # Create basic .htaccess if none exists in project
-        log "No .htaccess found in project, creating basic version..."
-        cat > "$APACHE_ROOT/.htaccess" << 'EOF'
-# React Router Configuration - Basic Version
-Options -MultiViews
-RewriteEngine On
-
-# Handle React Router
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule . /index.html [L]
-EOF
-        success "Created basic .htaccess for React Router"
-    fi
-    
-    # Set proper permissions for .htaccess
-    chown www-data:www-data "$APACHE_ROOT/.htaccess" 2>/dev/null || warning "Could not set .htaccess ownership"
-    chmod 644 "$APACHE_ROOT/.htaccess"
-}
 
 # Display deployment summary
 deployment_summary() {
@@ -261,7 +230,6 @@ main() {
     build_project
     create_backup
     deploy_to_apache
-    deploy_htaccess
     verify_deployment
     restart_apache
     
