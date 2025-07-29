@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Instagram } from 'lucide-react'
+import { Mail, MapPin, Linkedin } from 'lucide-react'
 
 const Footer = () => {
   const currentYear = new Date().getFullYear()
@@ -20,10 +20,7 @@ const Footer = () => {
   ]
 
   const socialLinks = [
-    { name: 'Facebook', icon: Facebook, href: '#' },
-    { name: 'Twitter', icon: Twitter, href: '#' },
-    { name: 'LinkedIn', icon: Linkedin, href: '#' },
-    { name: 'Instagram', icon: Instagram, href: '#' }
+    { name: 'LinkedIn', icon: Linkedin, href: 'https://www.linkedin.com/company/digi-cinta-kreatif/' }
   ]
 
   return (
@@ -92,15 +89,11 @@ const Footer = () => {
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
                 <Mail size={16} className="text-primary-400" />
-                <span className="text-secondary-300">info@digicinta.com</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <Phone size={16} className="text-primary-400" />
-                <span className="text-secondary-300">+1 (555) 123-4567</span>
+                <span className="text-secondary-300">business@digicinta.com</span>
               </div>
               <div className="flex items-center space-x-3">
                 <MapPin size={16} className="text-primary-400" />
-                <span className="text-secondary-300">New York, NY</span>
+                <span className="text-secondary-300">South Jakarta, Indonesia</span>
               </div>
             </div>
           </div>

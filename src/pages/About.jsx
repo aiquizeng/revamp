@@ -25,42 +25,12 @@ const About = () => {
     }
   ]
 
-  const team = [
-    {
-      name: 'Ahmad Zain',
-      role: 'CEO & Founder',
-      image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop&crop=face&auto=format&q=80',
-      bio: '10+ years leading digital transformation initiatives for SMEs and enterprises across Malaysia and Southeast Asia.',
-      linkedin: 'https://linkedin.com/in/ahmadzain-digicinta'
-    },
-    {
-      name: 'Dr. Priya Sharma',
-      role: 'Chief Technology Officer',
-      image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop&crop=face&auto=format&q=80',
-      bio: 'Former Google AI researcher with PhD in Machine Learning. Specializes in enterprise AI implementation and automation.',
-      linkedin: 'https://linkedin.com/in/priya-sharma-cto'
-    },
-    {
-      name: 'Marcus Chen',
-      role: 'Head of Cybersecurity',
-      image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop&crop=face&auto=format&q=80',
-      bio: 'CISSP certified with 12+ years securing Fortune 500 companies. Previously at Deloitte Cyber Risk Services.',
-      linkedin: 'https://linkedin.com/in/marcus-chen-security'
-    },
-    {
-      name: 'Fatima Al-Rashid',
-      role: 'Director of Strategy',
-      image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop&crop=face&auto=format&q=80',
-      bio: 'McKinsey alumna with MBA from INSEAD. Leads digital strategy consulting for mid-market and enterprise clients.',
-      linkedin: 'https://linkedin.com/in/fatima-alrashid-strategy'
-    }
-  ]
 
   const stats = [
-    { number: '200+', label: 'Projects Delivered' },
+    { number: '51+', label: 'Projects Delivered' },
     { number: '94%', label: 'Client Retention Rate' },
-    { number: '25+', label: 'Team Specialists' },
-    { number: '4', label: 'Years of Impact' }
+    { number: '11+', label: 'Team Specialists' },
+    { number: '8+', label: 'Years Experience' }
   ]
 
   return (
@@ -83,25 +53,13 @@ const About = () => {
             </h2>
             <div className="space-y-4 text-secondary-600 leading-relaxed">
               <p>
-                Founded in 2020 during the global digital acceleration, DigiCinta emerged from 
-                a team of senior consultants who witnessed firsthand how traditional businesses 
-                struggled with rapid digitalization. With backgrounds from McKinsey, Google, 
-                and Deloitte, our founders combined strategy expertise with deep technical knowledge 
-                to create a consultancy that truly bridges business and technology.
+                Founded in 2017, DigiCinta was born from a shared vision among senior consultants who saw how traditional businesses were struggling to adapt to the fast pace of digital transformation. With deep roots in both the telecom and digital sectors, our founders combined strategic insight with hands-on technical and business expertise to offer solutions that seamlessly bridge technology and profitability for our clients.
               </p>
               <p>
-                Starting with three consultants in Kuala Lumpur, we've grown to a distributed team 
-                of 25+ specialists serving clients across APAC and beyond. Our early wins with 
-                manufacturing automation and e-commerce platforms established our reputation, 
-                leading to partnerships with mid-market companies and Fortune 1000 enterprises 
-                seeking practical AI implementation and digital transformation.
+                What began as a small team in Jakarta has grown into a dynamic group of 11+ specialists serving clients across Southeast Asia, APAC, MENA, and beyond. Our early successes with telecom operators and e-commerce platforms helped establish our credibility, paving the way for collaborations with mid-sized firms and large enterprises looking for real-world AI integration and impactful digital transformation.
               </p>
               <p>
-                Today, DigiCinta is recognized for delivering measurable ROI through technology. 
-                Our clients typically see 25-40% operational efficiency improvements within 
-                6 months. We've completed over 200 projects, from AI-powered customer service 
-                bots to comprehensive cybersecurity overhauls, always focusing on sustainable, 
-                long-term business impact.
+                Today, DigiCinta is trusted for delivering tangible business value through technology. Most of our clients see significant operational improvements within just six months. With over 50 successful projects under our belt, from gaming content and affiliate marketing to AI-powered customer engagement and end-to-end cybersecurity upgrades, we remain focused on creating sustainable, long-term growth for every business we serve.
               </p>
             </div>
           </div>
@@ -144,34 +102,6 @@ const About = () => {
           </div>
         </div>
 
-        <div className="mb-20">
-          <h2 className="text-3xl font-bold text-secondary-900 text-center mb-12">
-            Meet Our Team
-          </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {team.map((member, index) => (
-              <div key={index} className="text-center">
-                <div className="relative mb-6">
-                  <img
-                    src={member.image}
-                    alt={member.name}
-                    className="w-32 h-32 rounded-full mx-auto object-cover"
-                  />
-                  <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-primary-600 rounded-full border-4 border-white"></div>
-                </div>
-                <h3 className="text-xl font-semibold text-secondary-900 mb-1">
-                  {member.name}
-                </h3>
-                <p className="text-primary-600 font-medium mb-3">
-                  {member.role}
-                </p>
-                <p className="text-secondary-600 text-sm leading-relaxed">
-                  {member.bio}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
 
       <WhyChooseUs />

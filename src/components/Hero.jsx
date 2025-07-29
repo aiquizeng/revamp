@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom'
 import { HiArrowNarrowRight } from 'react-icons/hi'
-import { FaPlay } from 'react-icons/fa'
 import { useEffect, useState } from 'react'
 
 const Hero = () => {
@@ -74,11 +73,6 @@ const Hero = () => {
               <span>Get Started Today</span>
               <HiArrowNarrowRight size={20} className="ml-2 flex-shrink-0 transition-transform duration-300 group-hover:translate-x-2" />
             </Link>
-            
-            <button className="btn-secondary group w-full xs:w-auto">
-              <FaPlay size={16} className="mr-2 flex-shrink-0 transition-transform duration-300 group-hover:scale-110" />
-              <span>Watch Our Story</span>
-            </button>
           </div>
           
           {/* Stats or trust indicators */}
@@ -86,7 +80,7 @@ const Hero = () => {
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}>
             <div className="bg-white/15 backdrop-blur-md border border-white/30 rounded-xl shadow-2xl p-2.5 xs:p-3 sm:p-4 md:p-6 text-center hover:bg-white/20 transition-all duration-300">
-              <div className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-bold text-white mb-1 sm:mb-2 drop-shadow-lg">200+</div>
+              <div className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-bold text-white mb-1 sm:mb-2 drop-shadow-lg">51+</div>
               <div className="text-white/90 text-xs sm:text-sm font-medium">Projects Delivered</div>
             </div>
             <div className="bg-white/15 backdrop-blur-md border border-white/30 rounded-xl shadow-2xl p-2.5 xs:p-3 sm:p-4 md:p-6 text-center hover:bg-white/20 transition-all duration-300">
@@ -94,8 +88,8 @@ const Hero = () => {
               <div className="text-white/90 text-xs sm:text-sm font-medium">Avg ROI Increase</div>
             </div>
             <div className="bg-white/15 backdrop-blur-md border border-white/30 rounded-xl shadow-2xl p-2.5 xs:p-3 sm:p-4 md:p-6 text-center hover:bg-white/20 transition-all duration-300">
-              <div className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-bold text-white mb-1 sm:mb-2 drop-shadow-lg">APAC</div>
-              <div className="text-white/90 text-xs sm:text-sm font-medium">Regional Presence</div>
+              <div className="text-base xs:text-lg sm:text-xl md:text-2xl font-bold text-white mb-1 sm:mb-2 drop-shadow-lg">SEA+</div>
+              <div className="text-white/90 text-xs sm:text-sm font-medium">Serving Clients in SEA, APAC & MENA</div>
             </div>
           </div>
         </div>

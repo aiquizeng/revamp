@@ -3,8 +3,8 @@ import WhyChooseUs from '../components/WhyChooseUs'
 import ServiceCard from '../components/ServiceCard'
 import TechStack from '../components/TechStack'
 import StatsSection from '../components/StatsSection'
-import TestimonialsSection from '../components/TestimonialsSection'
 import CaseStudiesPreview from '../components/CaseStudiesPreview'
+import TrustedCompanies from '../components/TrustedCompanies'
 import { Search, Code, Bot, Shield, TrendingUp } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
@@ -12,33 +12,38 @@ const Home = () => {
   const services = [
     {
       icon: Search,
-      title: 'Product & Market Research',
-      description: 'Data-driven insights to validate your ideas and identify market opportunities with comprehensive competitive analysis.',
-      features: ['Market Analysis', 'User Research', 'Competitive Intelligence', 'Product Validation']
+      title: 'Market Research & Validation',
+      description: '💰 Reduce product launch risks through data-driven validation. Get competitor intelligence and market insights to make informed decisions.',
+      features: ['Risk Evaluation & Validation', 'Market Analysis & Insights', 'Competitor Intelligence', 'Strategic Planning'],
+      roi: 'Risk Reduction'
     },
     {
       icon: Code,
       title: 'Custom Software & Automation',
-      description: 'Tailored software solutions and automation systems designed to streamline operations and boost productivity.',
-      features: ['Web Applications', 'Mobile Apps', 'Process Automation', 'System Integration']
+      description: '⚡ Streamline operations with custom automation solutions. Reduce manual work and improve efficiency.',
+      features: ['Process Automation', 'Workflow Optimization', 'Error Reduction', '24/7 Operations'],
+      roi: 'Efficiency Gains'
     },
     {
       icon: Bot,
-      title: 'Enterprise AI Agents',
-      description: 'Intelligent AI-powered agents that automate complex workflows and provide 24/7 business support.',
-      features: ['Workflow Automation', 'Customer Support Bots', 'Data Processing', 'Predictive Analytics']
+      title: 'AI Agents & Chatbots',
+      description: '🤖 Automate customer support with intelligent chatbots. Provide 24/7 assistance and improve response times.',
+      features: ['Automated Support', 'Improved Response Times', '24/7 Availability', 'Lead Generation'],
+      roi: 'Cost Savings'
     },
     {
       icon: Shield,
       title: 'Cybersecurity Solutions',
-      description: 'Comprehensive security frameworks to protect your digital assets and ensure regulatory compliance.',
-      features: ['Security Audits', 'Threat Detection', 'Compliance Management', 'Incident Response']
+      description: '🛡️ Protect your business with enterprise-grade security solutions. Ensure compliance and prevent potential breaches.',
+      features: ['Security Review', 'Compliance Management', 'Breach Prevention', 'Risk Mitigation'],
+      roi: 'Risk Protection'
     },
     {
       icon: TrendingUp,
-      title: 'Digital Strategy Consulting',
-      description: 'Strategic roadmaps for digital transformation that align technology investments with business goals.',
-      features: ['Digital Transformation', 'Technology Roadmaps', 'Change Management', 'ROI Optimization']
+      title: 'Digital Transformation',
+      description: '📈 Transform your business with comprehensive digital solutions. Modernize operations and stay competitive.',
+      features: ['Digital Modernization', 'Competitive Advantage', 'Future-Ready Solutions', 'Innovation Focus'],
+      roi: 'Growth Potential'
     }
   ]
 
@@ -69,15 +74,11 @@ const Home = () => {
                 title={service.title}
                 description={service.description}
                 features={service.features}
+                roi={service.roi}
               />
             ))}
           </div>
 
-          <div className="text-center mt-12">
-            <Link to="/services" className="btn-primary">
-              View All Services
-            </Link>
-          </div>
         </div>
       </section>
 
@@ -85,27 +86,31 @@ const Home = () => {
 
       <CaseStudiesPreview />
 
-      <TestimonialsSection />
+      <TrustedCompanies />
 
       <WhyChooseUs />
 
-      <section className="section-spacing bg-primary-600 text-white">
-        <div className="section-container text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Ready to Get Started?
+      <section className="section-spacing bg-gradient-to-r from-green-600 to-green-800 text-white relative">
+        <div className="absolute inset-0 bg-black/20"></div>
+        <div className="section-container text-center relative z-10 pt-8">
+          <div className="bg-yellow-400 text-black px-3 xs:px-4 py-2 rounded-full inline-block text-xs xs:text-sm font-bold mb-6 animate-bounce-slow text-center max-w-xs xs:max-w-sm mx-auto">
+            🚀 SPECIAL OFFER: Free Consultation
+          </div>
+          <h2 className="final-cta-title text-3xl md:text-5xl font-bold mb-6">
+            Don't Let Competitors Beat You
           </h2>
-          <p className="text-xl text-primary-100 mb-8 max-w-2xl mx-auto">
-            Let's discuss how DigiCinta can help transform your business with 
-            innovative digital solutions tailored to your needs.
+          <p className="final-cta-text text-xl text-green-100 mb-8 max-w-3xl mx-auto">
+            While you're thinking, your competitors are growing. <strong>Join 51+ companies</strong> who 
+            transformed their operations with our solutions.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/contact" className="inline-flex items-center justify-center whitespace-nowrap bg-white text-primary-600 px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold hover:bg-primary-50 transition-all duration-300 hover:scale-105">
-              <span>Schedule Consultation</span>
-            </Link>
-            <Link to="/services" className="inline-flex items-center justify-center whitespace-nowrap border-2 border-white text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold hover:bg-white hover:text-primary-600 transition-all duration-300 hover:scale-105">
-              <span>Explore Services</span>
+          
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
+            <Link to="/contact" className="final-cta-button inline-flex items-center justify-center bg-yellow-400 text-black px-4 xs:px-6 sm:px-8 py-3 xs:py-4 rounded-xl font-bold hover:bg-yellow-300 transition-all duration-300 hover:scale-110 shadow-2xl text-sm xs:text-base sm:text-lg text-center">
+              <span className="block xs:inline">🚀 GET STARTED</span>
             </Link>
           </div>
+          
         </div>
       </section>
     </div>

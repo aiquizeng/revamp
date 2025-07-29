@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { TrendingUp, Users, Award, Clock } from 'lucide-react'
 import { useScrollAnimation } from '../hooks/useScrollAnimation'
+import { Link } from 'react-router-dom'
 
 const StatsSection = () => {
   const [ref, isVisible] = useScrollAnimation(0.3)
@@ -15,7 +16,7 @@ const StatsSection = () => {
     {
       icon: TrendingUp,
       key: 'projects',
-      target: 500,
+      target: 50,
       suffix: '+',
       label: 'Projects Completed',
       description: 'Successfully delivered digital solutions',
@@ -24,7 +25,7 @@ const StatsSection = () => {
     {
       icon: Users,
       key: 'clients',
-      target: 200,
+      target: 25,
       suffix: '+',
       label: 'Happy Clients',
       description: 'Businesses transformed globally',
@@ -42,7 +43,7 @@ const StatsSection = () => {
     {
       icon: Clock,
       key: 'experience',
-      target: 5,
+      target: 8,
       suffix: '+',
       label: 'Years Experience',
       description: 'Leading digital transformation',
@@ -66,20 +67,20 @@ const StatsSection = () => {
       const easeOutCubic = 1 - Math.pow(1 - progress, 3)
 
       setCounters({
-        projects: Math.floor(easeOutCubic * 500),
-        clients: Math.floor(easeOutCubic * 200),
+        projects: Math.floor(easeOutCubic * 50),
+        clients: Math.floor(easeOutCubic * 25),
         satisfaction: Math.floor(easeOutCubic * 98),
-        experience: Math.floor(easeOutCubic * 5)
+        experience: Math.floor(easeOutCubic * 8)
       })
 
       if (frame >= totalFrames) {
         clearInterval(timer)
         // Set final values to ensure accuracy
         setCounters({
-          projects: 500,
-          clients: 200,
+          projects: 50,
+          clients: 25,
           satisfaction: 98,
-          experience: 5
+          experience: 8
         })
       }
     }, 1000 / frameRate)
@@ -120,7 +121,7 @@ const StatsSection = () => {
                 }`}
                 style={{ transitionDelay: `${index * 200}ms` }}
               >
-                <div className="glass-card p-4 xs:p-5 sm:p-6 md:p-8 group hover:scale-105 transition-all duration-300">
+                <div className="glass-card p-4 xs:p-5 sm:p-6 md:p-8 group hover:scale-105 transition-all duration-300 h-full flex flex-col">
                   {/* Icon */}
                   <div className={`inline-flex items-center justify-center w-12 xs:w-14 sm:w-16 h-12 xs:h-14 sm:h-16 bg-white/10 rounded-xl sm:rounded-2xl mb-4 sm:mb-6 group-hover:bg-white/20 transition-all duration-300 ${
                     isVisible ? 'animate-bounce-slow' : ''
@@ -129,7 +130,7 @@ const StatsSection = () => {
                   </div>
 
                   {/* Counter */}
-                  <div className="mb-3 sm:mb-4">
+                  <div className="mb-3 sm:mb-4 flex-grow flex flex-col justify-center">
                     <div className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-1 sm:mb-2">
                       {counters[stat.key]}{stat.suffix}
                     </div>
@@ -164,10 +165,10 @@ const StatsSection = () => {
           <p className="text-white/80 text-lg mb-6">
             Ready to become our next success story?
           </p>
-          <button className="btn-secondary group">
+          <Link to="/contact" className="btn-secondary group">
             <span>Start Your Project</span>
             <TrendingUp size={20} className="ml-2 flex-shrink-0 transition-transform duration-300 group-hover:translate-x-2" />
-          </button>
+          </Link>
         </div>
       </div>
     </section>

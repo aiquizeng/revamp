@@ -1,13 +1,14 @@
-import { ArrowRight, TrendingUp, Users, Clock, Award } from 'lucide-react'
+import { TrendingUp, Users, Clock } from 'lucide-react'
 import { useScrollAnimation } from '../hooks/useScrollAnimation'
+import { Link } from 'react-router-dom'
 
 const CaseStudiesPreview = () => {
   const [ref, isVisible] = useScrollAnimation(0.2)
 
   const caseStudies = [
     {
-      title: 'E-commerce AI Revolution',
-      client: 'RetailPro Enterprise',
+      title: 'E-commerce AI Implementation',
+      client: 'RetailTech Solutions',
       category: 'Enterprise AI',
       challenge: 'High customer support costs and low satisfaction scores',
       solution: 'Custom AI chatbot with natural language processing',
@@ -16,39 +17,39 @@ const CaseStudiesPreview = () => {
         { icon: Users, metric: '60%', label: 'Reduction in Support Tickets' },
         { icon: Clock, metric: '<2s', label: 'Average Response Time' }
       ],
-      image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop',
+      image: null,
       tags: ['AI/ML', 'React', 'Node.js', 'OpenAI'],
       color: 'from-primary-500 to-primary-700'
     },
     {
-      title: 'Healthcare Data Transformation',
-      client: 'HealthTech Solutions',
-      category: 'Custom Software',
-      challenge: 'Inefficient patient data management and compliance issues',
-      solution: 'HIPAA-compliant platform with real-time analytics',
+      title: 'Telecom Security Enhancement',
+      client: 'TelecomSecure Asia',
+      category: 'Cybersecurity',
+      challenge: 'Critical security vulnerabilities and compliance requirements',
+      solution: 'Enterprise-grade security framework with 24/7 monitoring',
       results: [
-        { icon: TrendingUp, metric: '10x', label: 'Faster Data Processing' },
-        { icon: Users, metric: '95%', label: 'User Adoption Rate' },
-        { icon: Award, metric: '85%', label: 'Error Reduction' }
+        { icon: TrendingUp, metric: '99%', label: 'Threat Detection Rate' },
+        { icon: Users, metric: '85%', label: 'Faster Incident Response' },
+        { icon: Clock, metric: '24/7', label: 'Continuous Monitoring' }
       ],
-      image: 'https://images.unsplash.com/photo-1559757175-0eb30cd8c063?w=600&h=400&fit=crop',
-      tags: ['Python', 'Django', 'PostgreSQL', 'React'],
-      color: 'from-primary-600 to-primary-800'
+      image: null,
+      tags: ['Cybersecurity', 'Python', 'AWS', 'Monitoring'],
+      color: 'from-red-500 to-red-700'
     },
     {
-      title: 'Fintech Security Overhaul',
-      client: 'SecureFinance Inc.',
-      category: 'Cybersecurity',
-      challenge: 'Multiple security vulnerabilities and compliance gaps',
-      solution: 'Comprehensive security audit and infrastructure hardening',
+      title: 'Digital Banking Transformation',
+      client: 'FinanceFlow Indonesia',
+      category: 'Digital Strategy',
+      challenge: 'Legacy systems and poor digital customer experience',
+      solution: 'Complete digital transformation with mobile-first approach',
       results: [
-        { icon: Award, metric: '47', label: 'Vulnerabilities Fixed' },
-        { icon: TrendingUp, metric: '100%', label: 'Compliance Score' },
-        { icon: Users, metric: 'A+', label: 'Security Rating' }
+        { icon: TrendingUp, metric: '65%', label: 'Digital Adoption Rate' },
+        { icon: Users, metric: '3x', label: 'Mobile Transaction Volume' },
+        { icon: Clock, metric: '50%', label: 'Faster Processing Time' }
       ],
-      image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=600&h=400&fit=crop',
-      tags: ['Security Testing', 'Compliance', 'Infrastructure'],
-      color: 'from-primary-700 to-primary-900'
+      image: null,
+      tags: ['Digital Strategy', 'Mobile', 'API', 'Banking'],
+      color: 'from-green-500 to-green-700'
     }
   ]
 
@@ -82,22 +83,13 @@ const CaseStudiesPreview = () => {
               } flex flex-col lg:flex`}>
                 {/* Image Section */}
                 <div className="lg:w-1/2 relative overflow-hidden group">
-                  <div className={`absolute inset-0 bg-gradient-to-br ${study.color} opacity-0 group-hover:opacity-90 transition-all duration-500 z-10`}></div>
-                  <img
-                    src={study.image}
-                    alt={study.title}
-                    className="w-full h-48 xs:h-56 sm:h-64 lg:h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-black/20"></div>
-                  
-                  {/* Overlay Content */}
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 z-20">
-                    <button className="btn-secondary text-sm sm:text-base px-4 sm:px-6 py-2 sm:py-3">
-                      <span className="hidden xs:inline">View Full Case Study</span>
-                      <span className="xs:hidden">View Case</span>
-                      <ArrowRight size={16} className="sm:w-5 sm:h-5 ml-2 flex-shrink-0" />
-                    </button>
+                  <div className={`w-full h-48 xs:h-56 sm:h-64 lg:h-full bg-gradient-to-br ${study.color} flex items-center justify-center transition-all duration-500 group-hover:scale-110`}>
+                    <div className="text-white text-4xl xs:text-5xl sm:text-6xl lg:text-7xl opacity-50 transition-all duration-500 group-hover:opacity-70">
+                      {study.category === 'Enterprise AI' ? '🤖' : 
+                       study.category === 'Cybersecurity' ? '🛡️' : '📊'}
+                    </div>
                   </div>
+                  
 
                   {/* Category Badge */}
                   <div className="absolute top-2 xs:top-4 left-2 xs:left-4 bg-white/90 backdrop-blur-sm px-2 xs:px-3 py-1 rounded-full text-xs sm:text-sm font-semibold text-secondary-700">
@@ -173,12 +165,6 @@ const CaseStudiesPreview = () => {
                     </div>
                   </div>
 
-                  {/* CTA */}
-                  <button className="btn-ghost group text-xs xs:text-sm sm:text-base">
-                    <span className="hidden xs:inline">Read Full Case Study</span>
-                    <span className="xs:hidden">Read More</span>
-                    <ArrowRight size={14} className="xs:w-4 xs:h-4 sm:w-5 sm:h-5 ml-1 xs:ml-2 flex-shrink-0 transition-transform duration-300 group-hover:translate-x-2" />
-                  </button>
                 </div>
               </div>
             </div>
@@ -197,14 +183,9 @@ const CaseStudiesPreview = () => {
               Join hundreds of businesses that have transformed their operations with our digital solutions.
             </p>
             <div className="flex flex-col xs:flex-row gap-2 xs:gap-3 sm:gap-4 justify-center">
-              <button className="btn-secondary text-xs xs:text-sm sm:text-base px-3 xs:px-4 sm:px-6 py-2 xs:py-3 sm:py-4">
-                <span className="hidden xs:inline">View All Case Studies</span>
-                <span className="xs:hidden">View All Cases</span>
-                <ArrowRight size={14} className="xs:w-4 xs:h-4 sm:w-5 sm:h-5 ml-1 xs:ml-2 flex-shrink-0" />
-              </button>
-              <button className="inline-flex items-center justify-center whitespace-nowrap bg-white/10 backdrop-blur-sm text-white border border-white/20 px-3 xs:px-4 sm:px-6 md:px-8 py-2 xs:py-3 sm:py-4 rounded-lg sm:rounded-xl font-semibold hover:bg-white/20 transition-all duration-300 hover:scale-105 text-xs xs:text-sm sm:text-base">
+              <Link to="/contact" className="inline-flex items-center justify-center whitespace-nowrap bg-white/10 backdrop-blur-sm text-white border border-white/20 px-3 xs:px-4 sm:px-6 md:px-8 py-2 xs:py-3 sm:py-4 rounded-lg sm:rounded-xl font-semibold hover:bg-white/20 transition-all duration-300 hover:scale-105 text-xs xs:text-sm sm:text-base">
                 <span>Start Your Project</span>
-              </button>
+              </Link>
             </div>
           </div>
         </div>

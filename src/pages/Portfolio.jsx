@@ -1,4 +1,5 @@
 import { ExternalLink, Calendar, Tag } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 const Portfolio = () => {
   const projects = [
@@ -16,42 +17,68 @@ const Portfolio = () => {
       ]
     },
     {
-      title: 'Financial Services Security Audit',
+      title: 'Telecom Security Platform',
       category: 'Cybersecurity',
-      description: 'Comprehensive security assessment and infrastructure hardening for a fintech startup, ensuring SOC 2 compliance.',
-      image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=600&h=400&fit=crop',
-      technologies: ['Security Testing', 'Compliance', 'Infrastructure'],
+      description: 'Enterprise security solution for telecom operator with real-time threat detection and automated incident response capabilities.',
+      image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=600&h=400&fit=crop',
+      technologies: ['Python', 'AWS', 'Docker', 'Elasticsearch'],
       date: '2024',
       metrics: [
-        { label: 'Vulnerabilities Fixed', value: '47' },
-        { label: 'Compliance Score', value: '100%' },
-        { label: 'Security Rating', value: 'A+' }
+        { label: 'Threat Detection', value: '99%' },
+        { label: 'Response Time', value: '-85%' },
+        { label: 'Security Score', value: '98/100' }
       ]
     },
     {
-      title: 'Healthcare Data Platform',
-      category: 'Custom Software',
-      description: 'HIPAA-compliant patient data management system with real-time analytics and automated reporting capabilities.',
-      image: 'https://images.unsplash.com/photo-1559757175-0eb30cd8c063?w=600&h=400&fit=crop',
-      technologies: ['Python', 'Django', 'PostgreSQL', 'React'],
-      date: '2023',
-      metrics: [
-        { label: 'Data Processing', value: '10x faster' },
-        { label: 'User Adoption', value: '95%' },
-        { label: 'Error Reduction', value: '-85%' }
-      ]
-    },
-    {
-      title: 'Market Research Dashboard',
+      title: 'Banking Digital Transformation',
       category: 'Digital Strategy',
-      description: 'Real-time market intelligence platform that aggregates data from multiple sources to provide actionable business insights.',
+      description: 'Complete digital overhaul for Indonesian bank including mobile app, web platform, and internal systems modernization.',
       image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
-      technologies: ['React', 'D3.js', 'Python', 'AWS'],
+      technologies: ['React Native', 'Spring Boot', 'PostgreSQL', 'Kubernetes'],
       date: '2023',
       metrics: [
-        { label: 'Data Sources', value: '50+' },
-        { label: 'Analysis Speed', value: '5x faster' },
-        { label: 'Decision Accuracy', value: '+65%' }
+        { label: 'Digital Adoption', value: '+65%' },
+        { label: 'Mobile Transactions', value: '3x' },
+        { label: 'Processing Speed', value: '+50%' }
+      ]
+    },
+    {
+      title: 'Logistics Automation System',
+      category: 'Custom Software',
+      description: 'End-to-end logistics management platform with real-time tracking, route optimization, and predictive analytics.',
+      image: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=600&h=400&fit=crop',
+      technologies: ['Vue.js', 'Node.js', 'Redis', 'GraphQL'],
+      date: '2023',
+      metrics: [
+        { label: 'Delivery Efficiency', value: '+45%' },
+        { label: 'Cost Reduction', value: '-30%' },
+        { label: 'Customer Satisfaction', value: '4.8/5' }
+      ]
+    },
+    {
+      title: 'Gaming Analytics Platform',
+      category: 'Enterprise AI',
+      description: 'AI-powered gaming analytics platform providing real-time player insights and automated game optimization recommendations.',
+      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=400&fit=crop',
+      technologies: ['Python', 'TensorFlow', 'React', 'Apache Kafka'],
+      date: '2023',
+      metrics: [
+        { label: 'Player Retention', value: '+35%' },
+        { label: 'Revenue Growth', value: '+28%' },
+        { label: 'Prediction Accuracy', value: '92%' }
+      ]
+    },
+    {
+      title: 'Retail Chain Security Upgrade',
+      category: 'Cybersecurity',
+      description: 'Comprehensive cybersecurity overhaul for retail chain including POS security, network protection, and compliance management.',
+      image: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=600&h=400&fit=crop',
+      technologies: ['Fortinet', 'Splunk', 'Azure', 'PowerShell'],
+      date: '2022',
+      metrics: [
+        { label: 'Security Incidents', value: '-95%' },
+        { label: 'Compliance Score', value: '100%' },
+        { label: 'System Uptime', value: '99.9%' }
       ]
     }
   ]
@@ -136,10 +163,10 @@ const Portfolio = () => {
                   ))}
                 </div>
                 
-                <button className="flex items-center text-primary-600 hover:text-primary-700 font-medium transition-colors duration-200">
-                  View Case Study
+                <Link to="/contact" className="flex items-center text-primary-600 hover:text-primary-700 font-medium transition-colors duration-200">
+                  Contact Us
                   <ExternalLink size={16} className="ml-2" />
-                </button>
+                </Link>
               </div>
             </div>
           ))}
@@ -153,9 +180,9 @@ const Portfolio = () => {
             Let's discuss how we can help you achieve similar results for your business 
             with our comprehensive digital solutions.
           </p>
-          <button className="bg-white text-primary-600 px-8 py-3 rounded-lg font-medium hover:bg-primary-50 transition-colors duration-200">
+          <Link to="/contact" className="bg-white text-primary-600 px-8 py-3 rounded-lg font-medium hover:bg-primary-50 transition-colors duration-200">
             Get Started Today
-          </button>
+          </Link>
         </div>
       </div>
     </div>

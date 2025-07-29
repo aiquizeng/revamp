@@ -8,48 +8,40 @@ const TestimonialsSection = () => {
 
   const testimonials = [
     {
-      name: 'Datuk Seri Lim Wei Hoong',
-      role: 'CEO, MalayTech Industries',
-      company: 'MalayTech Industries Sdn Bhd',
-      content: 'DigiCinta delivered our manufacturing automation project 3 weeks ahead of schedule. The ROI was evident within 4 months - our production efficiency increased by 42% while reducing operational costs significantly.',
+      name: '',
+      role: 'CEO',
+      company: 'SkyTech Airways',
+      content: 'DigiCinta delivered our automation project ahead of schedule. Their professional approach and technical expertise made the implementation smooth and effective.',
       rating: 5,
       avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face&auto=format&q=80'
     },
     {
-      name: 'Priya Nair',
-      role: 'Head of Digital, SingHealth Group',
-      company: 'SingHealth Group',
-      content: 'Their healthcare AI solution transformed our patient triage system. We now process 60% more patients efficiently while maintaining the highest safety standards. Truly exceptional work.',
+      name: '',
+      role: 'Head of Digital',
+      company: 'MarketPlace Pro',
+      content: 'Their healthcare solution improved our system efficiency significantly. The implementation was professional and met all our requirements and safety standards.',
       rating: 5,
       avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face&auto=format&q=80'
     },
     {
-      name: 'James Tan',
-      role: 'CTO, Grab Financial Group',
-      company: 'Grab Financial Group',
-      content: 'DigiCinta\'s cybersecurity audit uncovered vulnerabilities we didn\'t know existed. Their comprehensive security framework has protected us from multiple threat attempts. Investment well worth it.',
-      rating: 5,
-      avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=100&h=100&fit=crop&crop=face&auto=format&q=80'
-    },
-    {
-      name: 'Maria Santos',
-      role: 'Digital Director, Ayala Corporation',
-      company: 'Ayala Corporation',
-      content: 'The AI customer service bot they built handles 80% of our inquiries automatically. Customer satisfaction increased from 7.2 to 8.9/10, and our support costs dropped by 35%. Outstanding results.',
+      name: '',
+      role: 'Digital Director',
+      company: 'NetworkPlus',
+      content: 'The AI customer service solution they built significantly improved our inquiry handling capabilities. The system is well-designed and user-friendly.',
       rating: 5,
       avatar: 'https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=100&h=100&fit=crop&crop=face&auto=format&q=80'
     }
   ]
 
   const clientLogos = [
-    { name: 'MalayTech', logo: '🏭' },
-    { name: 'SingHealth', logo: '🏥' },
-    { name: 'Grab Financial', logo: '🚗' },
-    { name: 'Ayala Corp', logo: '🏢' },
-    { name: 'DBS Bank', logo: '🏦' },
-    { name: 'Genting Group', logo: '🎲' },
-    { name: 'AirAsia', logo: '✈️' },
-    { name: 'Shopee', logo: '🛒' }
+    { name: 'SkyTech Airways', logo: '✈️' },
+    { name: 'ShopFlow', logo: '🛒' },
+    { name: 'ConnectTel', logo: '📱' },
+    { name: 'MarketPlace Pro', logo: '🛍️' },
+    { name: 'TechCore Systems', logo: '📱' },
+    { name: 'NetworkPlus', logo: '📡' },
+    { name: 'MegaBank Corp', logo: '🏦' },
+    { name: 'SecureFinance', logo: '🏛️' }
   ]
 
   useEffect(() => {
@@ -111,17 +103,14 @@ const TestimonialsSection = () => {
                 <div className="flex flex-col xs:flex-row items-center justify-center space-y-2 xs:space-y-0 xs:space-x-3 sm:space-x-4">
                   <img
                     src={testimonials[currentTestimonial].avatar}
-                    alt={testimonials[currentTestimonial].name}
+                    alt={`${testimonials[currentTestimonial].role} at ${testimonials[currentTestimonial].company}`}
                     className="w-10 xs:w-12 sm:w-14 md:w-16 h-10 xs:h-12 sm:h-14 md:h-16 rounded-full border-2 xs:border-3 sm:border-4 border-primary-100"
                   />
                   <div className="text-center xs:text-left">
-                    <div className="font-bold text-secondary-900 text-sm xs:text-base sm:text-lg">
-                      {testimonials[currentTestimonial].name}
-                    </div>
-                    <div className="text-secondary-600 text-xs xs:text-sm sm:text-base">
+                    <div className="text-secondary-600 text-sm xs:text-base sm:text-lg font-semibold">
                       {testimonials[currentTestimonial].role}
                     </div>
-                    <div className="text-primary-600 font-medium text-xs sm:text-sm">
+                    <div className="text-primary-600 font-bold text-xs sm:text-sm">
                       {testimonials[currentTestimonial].company}
                     </div>
                   </div>

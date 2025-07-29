@@ -12,7 +12,7 @@ const Header = () => {
   return (
     <header className="bg-white/80 backdrop-blur-xl shadow-lg border-b border-white/20 sticky top-0 z-50 transition-all duration-300">
       <nav className="section-container">
-        <div className="flex justify-between items-center py-3 sm:py-4 md:py-6">
+        <div className="flex justify-between items-center py-2 sm:py-3 md:py-4">
           <Link to="/" className="flex items-center space-x-2 sm:space-x-3 transition-transform duration-300 hover:scale-105 group">
             <div className="w-7 sm:w-8 md:w-10 h-7 sm:h-8 md:h-10 bg-gradient-to-r from-primary-600 to-primary-800 rounded-lg sm:rounded-xl flex items-center justify-center transition-all duration-300 group-hover:rotate-12 shadow-lg">
               <span className="text-white font-black text-xs sm:text-sm md:text-lg">DC</span>
@@ -56,7 +56,7 @@ const Header = () => {
 
         <div className={`lg:hidden overflow-hidden transition-all duration-500 ease-in-out ${
           isMenuOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
-        }`}>
+        }`} style={{overflowX: 'hidden'}}>
           <div className="py-4 sm:py-6 border-t border-primary-100 bg-gradient-to-br from-primary-50/50 to-secondary-50/50 backdrop-blur-sm">
             <div className="flex flex-col space-y-2 sm:space-y-3">
               {navigationItems.map((item, index) => (

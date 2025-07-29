@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Search, Code, Bot, Shield, TrendingUp, ChevronDown, ChevronUp, CheckCircle } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 const Services = () => {
   const [expandedService, setExpandedService] = useState(0)
@@ -89,7 +90,7 @@ const Services = () => {
       subtitle: 'Protect your business & money with proactive defense',
       description: 'Comprehensive cybersecurity services to protect your digital assets, ensure compliance, and maintain customer trust through robust security measures and continuous monitoring.',
       features: [
-        'Risk assessment & gap analysis',
+        'Security evaluation & gap analysis',
         'Web, cloud, and app vulnerability testing',
         'Data protection & compliance (ISO, GDPR)',
         'Endpoint and network security setup',
@@ -103,7 +104,7 @@ const Services = () => {
         'Build customer trust through security transparency'
       ],
       deliverables: [
-        'Risk assessment & gap analysis',
+        'Security evaluation & gap analysis',
         'Web, cloud, and app vulnerability testing',
         'Data protection & compliance (ISO, GDPR)',
         'Endpoint and network security setup',
@@ -243,9 +244,9 @@ const Services = () => {
                   </div>
 
                   <div className="mt-8 pt-6 border-t border-gray-100">
-                    <button className="btn-primary">
+                    <Link to="/contact" className="btn-primary">
                       Get Started with {service.title}
-                    </button>
+                    </Link>
                   </div>
                 </div>
               )}
@@ -261,9 +262,9 @@ const Services = () => {
             Every business is unique. Let's discuss how we can create a tailored 
             solution that addresses your specific challenges and goals.
           </p>
-          <button className="bg-white text-primary-600 px-8 py-3 rounded-lg font-medium hover:bg-primary-50 transition-colors duration-200">
+          <Link to="/contact" className="bg-white text-primary-600 px-8 py-3 rounded-lg font-medium hover:bg-primary-50 transition-colors duration-200">
             Schedule Free Consultation
-          </button>
+          </Link>
         </div>
       </div>
     </div>

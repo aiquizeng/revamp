@@ -1,5 +1,6 @@
 import { Shield, Zap, Users, Award } from 'lucide-react'
 import { useScrollAnimation } from '../hooks/useScrollAnimation'
+import { Link } from 'react-router-dom'
 
 const WhyChooseUs = () => {
   const [ref, isVisible] = useScrollAnimation(0.2)
@@ -73,9 +74,9 @@ const WhyChooseUs = () => {
             Join hundreds of companies that trust DigiCinta to deliver innovative 
             digital solutions and drive sustainable growth.
           </p>
-          <button className="bg-white text-primary-600 px-8 py-3 rounded-lg font-medium hover:bg-primary-50 transition-colors duration-200">
+          <Link to="/contact" className="bg-white text-primary-600 px-8 py-3 rounded-lg font-medium hover:bg-primary-50 transition-colors duration-200">
             Start Your Project Today
-          </button>
+          </Link>
         </div>
       </div>
     </section>

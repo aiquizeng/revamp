@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Mail, Phone, MapPin, Clock, Send, CheckCircle } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Mail, MapPin, Clock, Send, CheckCircle, Upload, X, AlertCircle, Loader2 } from 'lucide-react'
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -7,58 +7,126 @@ const Contact = () => {
     email: '',
     company: '',
     service: '',
+    budget: '',
+    timeline: '',
+    revenue: '',
     message: ''
   })
   
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [submitError, setSubmitError] = useState('')
+  const [uploadedFiles, setUploadedFiles] = useState([])
+  const [formProgress, setFormProgress] = useState(0)
+
+  // Auto-save to localStorage
+  useEffect(() => {
+    const savedData = localStorage.getItem('contactFormData')
+    if (savedData) {
+      setFormData(JSON.parse(savedData))
+    }
+  }, [])
+
+  useEffect(() => {
+    localStorage.setItem('contactFormData', JSON.stringify(formData))
+  }, [formData])
+
+  // Calculate form progress
+  useEffect(() => {
+    const requiredFields = ['name', 'email', 'message']
+    const optionalFields = ['company', 'service']
+    const allFields = [...requiredFields, ...optionalFields]
+    
+    const filledFields = allFields.filter(field => formData[field].trim() !== '').length
+    const progress = Math.round((filledFields / allFields.length) * 100)
+    setFormProgress(progress)
+  }, [formData])
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     })
+    // Clear error when user starts typing
+    if (submitError) setSubmitError('')
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    console.log('Form submitted:', formData)
-    setIsSubmitted(true)
+  const handleFileUpload = (e) => {
+    const files = Array.from(e.target.files)
+    const maxSize = 10 * 1024 * 1024 // 10MB
     
-    setTimeout(() => {
-      setIsSubmitted(false)
-      setFormData({
-        name: '',
-        email: '',
-        company: '',
-        service: '',
-        message: ''
-      })
-    }, 3000)
+    const validFiles = files.filter(file => {
+      if (file.size > maxSize) {
+        setSubmitError(`File ${file.name} is too large. Maximum size is 10MB.`)
+        return false
+      }
+      return true
+    })
+
+    setUploadedFiles([...uploadedFiles, ...validFiles])
+  }
+
+  const removeFile = (index) => {
+    setUploadedFiles(uploadedFiles.filter((_, i) => i !== index))
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setIsLoading(true)
+    setSubmitError('')
+    
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 2000))
+      
+      // Simulate random success/failure for demo
+      if (Math.random() > 0.2) {
+        console.log('Form submitted:', { formData, files: uploadedFiles })
+        setIsSubmitted(true)
+        
+        // Clear form and localStorage after successful submission
+        setTimeout(() => {
+          setIsSubmitted(false)
+          setFormData({
+            name: '',
+            email: '',
+            company: '',
+            service: '',
+            budget: '',
+            timeline: '',
+            revenue: '',
+            message: ''
+          })
+          setUploadedFiles([])
+          localStorage.removeItem('contactFormData')
+        }, 5000)
+      } else {
+        throw new Error('Network error. Please try again.')
+      }
+    } catch (error) {
+      setSubmitError(error.message)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const contactInfo = [
     {
       icon: Mail,
       title: 'Email',
-      details: 'info@digicinta.com',
+      details: 'business@digicinta.com',
       description: 'Send us an email anytime'
-    },
-    {
-      icon: Phone,
-      title: 'Phone',
-      details: '+1 (555) 123-4567',
-      description: 'Mon-Fri from 8am to 6pm'
     },
     {
       icon: MapPin,
       title: 'Office',
-      details: '123 Tech Street, New York, NY 10001',
+      details: 'South Jakarta, Indonesia',
       description: 'Come say hello at our office'
     },
     {
       icon: Clock,
       title: 'Business Hours',
-      details: 'Monday - Friday: 8am - 6pm EST',
+      details: 'Monday - Friday: 8am - 6pm WIB',
       description: 'Weekend support available'
     }
   ]
@@ -88,22 +156,51 @@ const Contact = () => {
         <div className="grid lg:grid-cols-3 gap-12">
           <div className="lg:col-span-2">
             <div className="bg-white rounded-2xl shadow-lg p-8">
-              <h2 className="text-2xl font-bold text-secondary-900 mb-6">
-                Send us a message
-              </h2>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold text-secondary-900">
+                  Send us a message
+                </h2>
+                <div className="flex items-center space-x-3">
+                  <span className="text-sm text-secondary-600">Progress</span>
+                  <div className="w-24 h-2 bg-gray-200 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-gradient-to-r from-primary-500 to-primary-600 transition-all duration-500 ease-out"
+                      style={{ width: `${formProgress}%` }}
+                    ></div>
+                  </div>
+                  <span className="text-sm font-medium text-primary-600">{formProgress}%</span>
+                </div>
+              </div>
               
               {isSubmitted ? (
                 <div className="text-center py-12">
-                  <CheckCircle className="text-green-600 mx-auto mb-4" size={48} />
-                  <h3 className="text-xl font-semibold text-secondary-900 mb-2">
-                    Thank you for your message!
+                  <div className="animate-bounce mb-4">
+                    <CheckCircle className="text-green-600 mx-auto" size={64} />
+                  </div>
+                  <h3 className="text-2xl font-bold text-secondary-900 mb-3">
+                    Message Sent Successfully! 🎉
                   </h3>
-                  <p className="text-secondary-600">
-                    We'll get back to you within 24 hours.
+                  <p className="text-secondary-600 mb-4">
+                    Thank you for reaching out to DigiCinta. We've received your message and will get back to you within 24 hours.
                   </p>
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-4 max-w-md mx-auto">
+                    <p className="text-green-800 text-sm">
+                      <strong>What's next?</strong> Our team will review your message and contact you at <strong>{formData.email}</strong> with next steps.
+                    </p>
+                  </div>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <div>
+                  {submitError && (
+                    <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
+                      <div className="flex items-center">
+                        <AlertCircle className="text-red-600 mr-3" size={20} />
+                        <p className="text-red-800 text-sm">{submitError}</p>
+                      </div>
+                    </div>
+                  )}
+                  
+                  <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
                       <label htmlFor="name" className="block text-sm font-medium text-secondary-700 mb-2">
@@ -175,6 +272,59 @@ const Contact = () => {
                     </div>
                   </div>
 
+                  {/* File Upload Section */}
+                  <div>
+                    <label className="block text-sm font-medium text-secondary-700 mb-2">
+                      Attachments (Optional)
+                    </label>
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 hover:border-primary-400 transition-colors duration-200">
+                      <input
+                        type="file"
+                        multiple
+                        onChange={handleFileUpload}
+                        className="hidden"
+                        id="file-upload"
+                        accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png"
+                      />
+                      <label
+                        htmlFor="file-upload"
+                        className="cursor-pointer flex flex-col items-center justify-center"
+                      >
+                        <Upload className="text-gray-400 mb-2" size={32} />
+                        <p className="text-gray-600 text-sm text-center">
+                          <span className="font-medium text-primary-600">Click to upload</span> or drag and drop
+                        </p>
+                        <p className="text-xs text-gray-500 mt-1">
+                          PDF, DOC, TXT, JPG, PNG up to 10MB each
+                        </p>
+                      </label>
+                    </div>
+                    
+                    {uploadedFiles.length > 0 && (
+                      <div className="mt-4 space-y-2">
+                        <p className="text-sm font-medium text-secondary-700">Uploaded files:</p>
+                        {uploadedFiles.map((file, index) => (
+                          <div key={index} className="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
+                            <div className="flex items-center">
+                              <Upload className="text-primary-600 mr-2" size={16} />
+                              <span className="text-sm text-secondary-700">{file.name}</span>
+                              <span className="text-xs text-gray-500 ml-2">
+                                ({(file.size / 1024 / 1024).toFixed(2)} MB)
+                              </span>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => removeFile(index)}
+                              className="text-red-500 hover:text-red-700 transition-colors duration-200"
+                            >
+                              <X size={16} />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
                   <div>
                     <label htmlFor="message" className="block text-sm font-medium text-secondary-700 mb-2">
                       Message *
@@ -193,12 +343,31 @@ const Contact = () => {
 
                   <button
                     type="submit"
-                    className="btn-primary flex items-center justify-center w-full"
+                    disabled={isLoading}
+                    className="btn-primary flex items-center justify-center w-full disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Send Message
-                    <Send size={20} className="ml-2" />
+                    {isLoading ? (
+                      <>
+                        <Loader2 size={20} className="mr-2 animate-spin" />
+                        Sending Message...
+                      </>
+                    ) : (
+                      <>
+                        Send Message
+                        <Send size={20} className="ml-2" />
+                      </>
+                    )}
                   </button>
+                  
+                  {formProgress > 0 && (
+                    <div className="text-center">
+                      <p className="text-xs text-gray-500">
+                        💾 Your progress is automatically saved
+                      </p>
+                    </div>
+                  )}
                 </form>
+                </div>
               )}
             </div>
           </div>
@@ -220,7 +389,17 @@ const Contact = () => {
                         {info.title}
                       </h4>
                       <p className="text-secondary-800 font-medium mb-1">
-                        {info.details}
+                        {info.title === 'Email' ? (
+                          <a href={`mailto:${info.details}`} className="text-primary-600 hover:text-primary-700 transition-colors">
+                            {info.details}
+                          </a>
+                        ) : info.title === 'Phone' ? (
+                          <a href={`tel:${info.details}`} className="text-primary-600 hover:text-primary-700 transition-colors">
+                            {info.details}
+                          </a>
+                        ) : (
+                          info.details
+                        )}
                       </p>
                       <p className="text-secondary-600 text-sm">
                         {info.description}
@@ -239,9 +418,12 @@ const Contact = () => {
                 For urgent matters or technical support, our team is available 
                 24/7 to assist you with any immediate needs.
               </p>
-              <button className="bg-white text-primary-600 px-6 py-2 rounded-lg font-medium hover:bg-primary-50 transition-colors duration-200 text-sm">
+              <a 
+                href="mailto:business@digicinta.com?subject=Emergency Support Request&body=This is an urgent request. Please contact me as soon as possible."
+                className="inline-block bg-white text-primary-600 px-6 py-2 rounded-lg font-medium hover:bg-primary-50 transition-colors duration-200 text-sm"
+              >
                 Emergency Support
-              </button>
+              </a>
             </div>
 
             <div className="bg-secondary-50 rounded-2xl p-8">
