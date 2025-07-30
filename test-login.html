@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Supabase Login Test</title>
+</head>
+<body>
+    <h1>Supabase Authentication Test</h1>
+    <div id="status"></div>
+    <form id="loginForm">
+        <input type="email" id="email" placeholder="Email" required><br><br>
+        <input type="password" id="password" placeholder="Password" required><br><br>
+        <button type="submit">Test Login</button>
+    </form>
+    <div id="result"></div>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.skypack.dev/@supabase/supabase-js';
+        
+        const supabaseUrl = 'https://rccdqmxwfxmtdvnvtgiz.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJjY2RxbXh3ZnhtdGR2bnZ0Z2l6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM4NjIyOTksImV4cCI6MjA2OTQzODI5OX0.gKzj1wmJIvA_0m5EPGonEM-eneOGLLD3xD2-hn8R-Ck';
+        
+        console.log('Initializing Supabase...');
+        const supabase = createClient(supabaseUrl, supabaseKey);
+        
+        document.getElementById('status').innerHTML = '<p style="color: green;">✓ Supabase client initialized</p>';
+        
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const resultDiv = document.getElementById('result');
+            
+            resultDiv.innerHTML = '<p>Testing login...</p>';
+            
+            try {
+                console.log('Attempting login with:', email);
+                
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+                
+                console.log('Login response:', { data, error });
+                
+                if (error) {
+                    resultDiv.innerHTML = `<p style="color: red;">❌ Login failed: ${error.message}</p>`;
+                } else if (data.user) {
+                    resultDiv.innerHTML = `<p style="color: green;">✓ Login successful! User: ${data.user.email}</p>`;
+                } else {
+                    resultDiv.innerHTML = '<p style="color: orange;">⚠️ No user returned</p>';
+                }
+            } catch (err) {
+                console.error('Login error:', err);
+                resultDiv.innerHTML = `<p style="color: red;">❌ Error: ${err.message}</p>`;
+            }
+        });
+        
+        // Test basic connectivity
+        supabase.auth.getSession().then(({ data, error }) => {
+            console.log('Session check:', { data, error });
+        });
+    </script>
+</body>
+</html>
