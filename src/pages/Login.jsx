@@ -26,18 +26,7 @@ const Login = () => {
     setError('')
 
     // Simple admin credentials check
-    const adminEmail = 'admin@digicinta.com'
-    const adminPassword = 'DigiCinta2024!'
-    
-    console.log('Login attempt:', {
-      inputEmail: formData.email,
-      inputPassword: formData.password,
-      emailMatch: formData.email.trim().toLowerCase() === adminEmail.toLowerCase(),
-      passwordMatch: formData.password === adminPassword
-    })
-    
-    if (formData.email.trim().toLowerCase() === adminEmail.toLowerCase() && formData.password === adminPassword) {
-      console.log('Admin credentials matched - logging in')
+    if (formData.email === 'admin@digicinta.com' && formData.password === 'DigiCinta2024!') {
       localStorage.setItem('isAuthenticated', 'true')
       navigate('/admin-dashboard')
       setIsLoading(false)
@@ -65,9 +54,9 @@ const Login = () => {
         }
       }
       
-      setError('Invalid email or password. Try: admin@digicinta.com / DigiCinta2024!')
+      setError('Invalid email or password')
     } catch (error) {
-      setError('Invalid email or password. Try: admin@digicinta.com / DigiCinta2024!')
+      setError('Invalid email or password')
     } finally {
       setIsLoading(false)
     }
@@ -85,9 +74,6 @@ const Login = () => {
           </h2>
           <p className="text-sm sm:text-base text-secondary-600">
             Access the admin dashboard
-          </p>
-          <p className="text-xs text-gray-500 mt-2">
-            Use: admin@digicinta.com / DigiCinta2024!
           </p>
         </div>
 
