@@ -136,29 +136,9 @@ setup_environment() {
         supabase_key="your_supabase_anon_key"
     fi
     
-    # Read Admin Credentials
-    while true; do
-        read -p "Enter VITE_ADMIN_EMAIL (default: admin@digicinta.com): " admin_email
-        if [[ -z "$admin_email" ]]; then
-            admin_email="admin@digicinta.com"
-        fi
-        break
-    done
-    
-    while true; do
-        read -s -p "Enter VITE_ADMIN_PASSWORD: " admin_password
-        echo
-        if [[ -n "$admin_password" ]]; then
-            break
-        fi
-        warning "Admin password cannot be empty"
-    done
-    
     # Update .env file
     sed -i "s|VITE_SUPABASE_URL=.*|VITE_SUPABASE_URL=$supabase_url|" .env
     sed -i "s|VITE_SUPABASE_ANON_KEY=.*|VITE_SUPABASE_ANON_KEY=$supabase_key|" .env
-    sed -i "s|VITE_ADMIN_EMAIL=.*|VITE_ADMIN_EMAIL=$admin_email|" .env
-    sed -i "s|VITE_ADMIN_PASSWORD=.*|VITE_ADMIN_PASSWORD=$admin_password|" .env
     
     success "Environment file created successfully"
     echo
