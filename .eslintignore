@@ -1,0 +1,7 @@
+dist/
+build/
+assets/
+*.min.js
+node_modules/
+coverage/
+public/
