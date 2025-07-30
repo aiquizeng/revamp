@@ -30,25 +30,21 @@ const Login = () => {
       const supabase = getSupabase()
 
       if (!supabase) {
-        console.error('Supabase client not available')
         setError('Authentication service unavailable')
         setIsLoading(false)
         return
       }
 
-      console.log('Attempting Supabase login with:', formData.email)
       const { data, error } = await supabase.auth.signInWithPassword({
         email: formData.email,
         password: formData.password
       })
 
       if (error) {
-        console.error('Supabase auth error:', error)
         throw new Error(error.message)
       }
 
       if (data.user) {
-        console.log('Login successful:', data.user.email)
         localStorage.setItem('isAuthenticated', 'true')
         navigate('/admin-dashboard')
         return
@@ -56,7 +52,6 @@ const Login = () => {
 
       setError('Invalid email or password')
     } catch (error) {
-      console.error('Login error:', error)
       setError(error.message || 'Invalid email or password')
     } finally {
       setIsLoading(false)

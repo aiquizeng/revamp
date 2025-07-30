@@ -7,24 +7,15 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 let supabaseInstance = null
 
 export const getSupabase = () => {
-  console.log('Supabase URL:', supabaseUrl ? 'Set' : 'Not set', supabaseUrl)
-  console.log('Supabase Key:', supabaseAnonKey ? 'Set' : 'Not set', supabaseAnonKey?.substring(0, 20) + '...')
-  console.log('All env vars:', import.meta.env)
-  
-  if (!supabaseUrl || !supabaseAnonKey) {
-    logger.warn('Supabase environment variables not configured')
-    console.error('Missing Supabase environment variables')
-    return null
-  }
+  // Fallback to hardcoded values if env vars not available
+  const url = supabaseUrl || 'https://rccdqmxwfxmtdvnvtgiz.supabase.co'
+  const key = supabaseAnonKey || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJjY2RxbXh3ZnhtdGR2bnZ0Z2l6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM4NjIyOTksImV4cCI6MjA2OTQzODI5OX0.gKzj1wmJIvA_0m5EPGonEM-eneOGLLD3xD2-hn8R-Ck'
   
   if (!supabaseInstance) {
     try {
-      console.log('Creating Supabase client...')
-      supabaseInstance = createClient(supabaseUrl, supabaseAnonKey)
-      console.log('Supabase client created successfully')
+      supabaseInstance = createClient(url, key)
     } catch (error) {
       logger.error('Failed to create Supabase client:', error)
-      console.error('Supabase client creation failed:', error)
       return null
     }
   }
