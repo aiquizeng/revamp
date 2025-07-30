@@ -25,25 +25,6 @@ const Login = () => {
     setIsLoading(true)
     setError('')
 
-    // Admin credentials from environment variables
-    const adminEmail = import.meta.env.VITE_ADMIN_EMAIL
-    const adminPassword = import.meta.env.VITE_ADMIN_PASSWORD
-
-    // Skip admin login if credentials not configured
-    if (!adminEmail || !adminPassword) {
-      setError('Admin credentials not configured')
-      setIsLoading(false)
-      return
-    }
-
-    if (formData.email.trim().toLowerCase() === adminEmail.toLowerCase() &&
-      formData.password === adminPassword) {
-      localStorage.setItem('isAuthenticated', 'true')
-      navigate('/admin-dashboard')
-      setIsLoading(false)
-      return
-    }
-
     try {
       const { getSupabase } = await import('../lib/supabase')
       const supabase = getSupabase()
