@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getFileUrl } from '../lib/fileUpload'
+import { logger } from '../lib/logger'
 import { 
   LogOut, 
   Mail, 
@@ -36,7 +37,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     checkAuth()
     fetchSubmissions().catch(error => {
-      console.error('Failed to fetch submissions:', error)
+      logger.error('Failed to fetch submissions:', error)
       setError('Failed to load submissions')
       setIsLoading(false)
     })
@@ -63,7 +64,7 @@ const AdminDashboard = () => {
 
       setSubmissions(data || [])
     } catch (error) {
-      console.error('Error fetching submissions:', error)
+      logger.error('Error fetching submissions:', error)
       setError('Failed to load submissions')
     } finally {
       setIsLoading(false)
@@ -75,7 +76,7 @@ const AdminDashboard = () => {
       const { supabase } = await import('../lib/supabase')
       await supabase.auth.signOut()
     } catch (error) {
-      console.error('Logout error:', error)
+      logger.error('Logout error:', error)
     }
     localStorage.removeItem('isAuthenticated')
     navigate('/admin-login')
@@ -111,7 +112,7 @@ const AdminDashboard = () => {
       link.click()
       document.body.removeChild(link)
     } catch (error) {
-      console.error('Failed to download file:', error)
+      logger.error('Failed to download file:', error)
     }
   }
 

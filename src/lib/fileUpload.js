@@ -1,3 +1,5 @@
+import { logger } from './logger'
+
 /**
  * Upload files to Supabase Storage
  * @param {File[]} files - Array of files to upload
@@ -32,7 +34,7 @@ export const uploadFiles = async (files, submissionId) => {
         })
 
       if (error) {
-        console.error(`Error uploading file ${file.name}:`, error)
+        logger.error(`Error uploading file ${file.name}:`, error)
         throw new Error(`Failed to upload ${file.name}: ${error.message}`)
       }
 
@@ -47,7 +49,7 @@ export const uploadFiles = async (files, submissionId) => {
     const uploadResults = await Promise.all(uploadPromises)
     return uploadResults
   } catch (error) {
-    console.error('File upload error:', error)
+    logger.error('File upload error:', error)
     throw error
   }
 }
@@ -72,7 +74,7 @@ export const getFileUrl = async (filePath) => {
     
     return data.publicUrl
   } catch (error) {
-    console.error('Error getting file URL:', error)
+    logger.error('Error getting file URL:', error)
     return '#'
   }
 }
@@ -100,11 +102,11 @@ export const deleteFiles = async (filePaths) => {
       .remove(filePaths)
 
     if (error) {
-      console.error('Error deleting files:', error)
+      logger.error('Error deleting files:', error)
       throw error
     }
   } catch (error) {
-    console.error('File deletion error:', error)
+    logger.error('File deletion error:', error)
     throw error
   }
 }

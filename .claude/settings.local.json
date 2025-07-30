@@ -19,7 +19,9 @@
       "Bash(chmod:*)",
       "Bash(./deploy.sh:*)",
       "Bash(npm install:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(git revert:*)",
+      "Bash(git rm:*)"
     ],
     "deny": []
   }

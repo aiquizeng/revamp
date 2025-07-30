@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Mail, MapPin, Clock, Send, CheckCircle, Upload, X, AlertCircle, Loader2 } from 'lucide-react'
 import { uploadFiles } from '../lib/fileUpload'
+import { logger } from '../lib/logger'
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -134,7 +135,7 @@ const Contact = () => {
           throw new Error(result.error.message || 'Failed to submit form. Please try again.')
         }
       } catch (supabaseError) {
-        console.error('Supabase submission failed:', supabaseError)
+        logger.error('Supabase submission failed:', supabaseError)
         // For now, just log the data and show success (temporary fallback)
       }
       setIsSubmitted(true)
@@ -157,7 +158,7 @@ const Contact = () => {
       }, 5000)
       
     } catch (error) {
-      console.error('Form submission error:', error)
+      logger.error('Form submission error:', error)
       setSubmitError(error.message)
     } finally {
       setIsLoading(false)

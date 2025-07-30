@@ -123,27 +123,42 @@ setup_environment() {
     echo "Please provide the following environment variables:"
     echo
     
-    # Read Supabase URL
+    # Read Supabase URL (optional)
+    read -p "Enter VITE_SUPABASE_URL (optional, press Enter to skip): " supabase_url
+    if [[ -z "$supabase_url" ]]; then
+        supabase_url="your_supabase_project_url"
+        log "Skipping Supabase configuration - app will use fallback authentication"
+    fi
+    
+    # Read Supabase Anon Key (optional)
+    read -p "Enter VITE_SUPABASE_ANON_KEY (optional, press Enter to skip): " supabase_key
+    if [[ -z "$supabase_key" ]]; then
+        supabase_key="your_supabase_anon_key"
+    fi
+    
+    # Read Admin Credentials
     while true; do
-        read -p "Enter VITE_SUPABASE_URL: " supabase_url
-        if [[ -n "$supabase_url" ]]; then
-            break
+        read -p "Enter VITE_ADMIN_EMAIL (default: admin@digicinta.com): " admin_email
+        if [[ -z "$admin_email" ]]; then
+            admin_email="admin@digicinta.com"
         fi
-        warning "VITE_SUPABASE_URL cannot be empty"
+        break
     done
     
-    # Read Supabase Anon Key
     while true; do
-        read -p "Enter VITE_SUPABASE_ANON_KEY: " supabase_key
-        if [[ -n "$supabase_key" ]]; then
+        read -s -p "Enter VITE_ADMIN_PASSWORD: " admin_password
+        echo
+        if [[ -n "$admin_password" ]]; then
             break
         fi
-        warning "VITE_SUPABASE_ANON_KEY cannot be empty"
+        warning "Admin password cannot be empty"
     done
     
     # Update .env file
     sed -i "s|VITE_SUPABASE_URL=.*|VITE_SUPABASE_URL=$supabase_url|" .env
     sed -i "s|VITE_SUPABASE_ANON_KEY=.*|VITE_SUPABASE_ANON_KEY=$supabase_key|" .env
+    sed -i "s|VITE_ADMIN_EMAIL=.*|VITE_ADMIN_EMAIL=$admin_email|" .env
+    sed -i "s|VITE_ADMIN_PASSWORD=.*|VITE_ADMIN_PASSWORD=$admin_password|" .env
     
     success "Environment file created successfully"
     echo
