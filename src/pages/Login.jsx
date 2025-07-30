@@ -26,11 +26,18 @@ const Login = () => {
     setError('')
 
     // Admin credentials from environment variables
-    const adminEmail = import.meta.env.VITE_ADMIN_EMAIL || 'admin@digicinta.com'
-    const adminPassword = import.meta.env.VITE_ADMIN_PASSWORD || 'DigiCinta2024!'
-    
-    if (formData.email.trim().toLowerCase() === adminEmail.toLowerCase() && 
-        formData.password === adminPassword) {
+    const adminEmail = import.meta.env.VITE_ADMIN_EMAIL
+    const adminPassword = import.meta.env.VITE_ADMIN_PASSWORD
+
+    // Skip admin login if credentials not configured
+    if (!adminEmail || !adminPassword) {
+      setError('Admin credentials not configured')
+      setIsLoading(false)
+      return
+    }
+
+    if (formData.email.trim().toLowerCase() === adminEmail.toLowerCase() &&
+      formData.password === adminPassword) {
       localStorage.setItem('isAuthenticated', 'true')
       navigate('/admin-dashboard')
       setIsLoading(false)
@@ -40,7 +47,7 @@ const Login = () => {
     try {
       const { getSupabase } = await import('../lib/supabase')
       const supabase = getSupabase()
-      
+
       if (supabase) {
         const { data, error } = await supabase.auth.signInWithPassword({
           email: formData.email,
@@ -57,9 +64,10 @@ const Login = () => {
           return
         }
       }
-      
+
       setError('Invalid email or password')
     } catch (error) {
+      console.log(error)
       setError('Invalid email or password')
     } finally {
       setIsLoading(false)
