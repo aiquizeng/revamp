@@ -3,20 +3,19 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
-// Debug logging
-console.log('Debug - Environment check:', {
-  supabaseUrl: supabaseUrl ? 'Found' : 'Missing',
-  supabaseAnonKey: supabaseAnonKey ? 'Found' : 'Missing'
-})
+let supabaseInstance = null
 
-if (!supabaseUrl) {
-  throw new Error('Missing VITE_SUPABASE_URL environment variable')
+export const getSupabase = () => {
+  if (!supabaseUrl || !supabaseAnonKey) {
+    console.warn('Supabase environment variables not configured')
+    return null
+  }
+  
+  if (!supabaseInstance) {
+    supabaseInstance = createClient(supabaseUrl, supabaseAnonKey)
+  }
+  
+  return supabaseInstance
 }
 
-if (!supabaseAnonKey) {
-  throw new Error('Missing VITE_SUPABASE_ANON_KEY environment variable')
-}
-
-console.log('Debug - Creating Supabase client...')
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
-console.log('Debug - Supabase client created successfully')
+export const supabase = getSupabase()

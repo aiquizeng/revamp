@@ -117,9 +117,14 @@ const Contact = () => {
       }
 
       // Submit to Supabase
-      let data = null
       try {
-        const { supabase } = await import('../lib/supabase')
+        const { getSupabase } = await import('../lib/supabase')
+        const supabase = getSupabase()
+        
+        if (!supabase) {
+          throw new Error('Database not configured. Please contact support.')
+        }
+        
         const result = await supabase
           .from('contact_submissions')
           .insert([submissionData])
@@ -128,14 +133,10 @@ const Contact = () => {
         if (result.error) {
           throw new Error(result.error.message || 'Failed to submit form. Please try again.')
         }
-        data = result.data
       } catch (supabaseError) {
         console.error('Supabase submission failed:', supabaseError)
         // For now, just log the data and show success (temporary fallback)
-        console.log('Form data would be submitted:', submissionData)
       }
-
-      console.log('Form submitted successfully:', data)
       setIsSubmitted(true)
       
       // Clear form and localStorage after successful submission

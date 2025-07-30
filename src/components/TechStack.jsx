@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import React from 'react'
+import { useState, createElement } from 'react'
 import { Code, Database, Cloud, Shield, Brain, Smartphone } from 'lucide-react'
 import { useScrollAnimation } from '../hooks/useScrollAnimation'
 
@@ -133,7 +132,7 @@ const TechStack = () => {
               <div className={`inline-flex items-center justify-center w-10 xs:w-12 sm:w-14 md:w-16 h-10 xs:h-12 sm:h-14 md:h-16 bg-gradient-to-r from-primary-500 to-primary-700 rounded-lg xs:rounded-xl sm:rounded-2xl mb-2 xs:mb-3 sm:mb-4 ${
                 isVisible ? 'animate-bounce-slow' : ''
               }`}>
-                {React.createElement(categories[activeCategory].icon, { 
+                {createElement(categories[activeCategory].icon, { 
                   size: 16, 
                   className: "text-white w-4 h-4 xs:w-5 xs:h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" 
                 })}

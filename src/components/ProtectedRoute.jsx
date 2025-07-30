@@ -8,35 +8,31 @@ const ProtectedRoute = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true)
 
   const checkAuth = useCallback(async () => {
-    console.log('🔒 Checking authentication status...')
     try {
-      // Try to load Supabase dynamically to avoid blocking the main app
-      console.log('🔗 Loading Supabase for auth check...')
-      const { supabase } = await import('../lib/supabase')
-      const { data: { session } } = await supabase.auth.getSession()
       const localAuth = localStorage.getItem('isAuthenticated')
       
-      console.log('📊 Auth status:', { 
-        session: session ? 'Found' : 'None', 
-        localAuth: localAuth || 'None' 
-      })
-      
-      if (session || localAuth === 'true') {
-        console.log('✅ Authentication verified - access granted')
+      if (localAuth === 'true') {
         setIsAuthenticated(true)
       } else {
-        console.log('❌ Not authenticated - redirecting to login')
-        navigate('/admin-login')
+        const { getSupabase } = await import('../lib/supabase')
+        const supabase = getSupabase()
+        
+        if (supabase) {
+          const { data: { session } } = await supabase.auth.getSession()
+          if (session) {
+            setIsAuthenticated(true)
+          } else {
+            navigate('/admin-login')
+          }
+        } else {
+          navigate('/admin-login')
+        }
       }
     } catch (error) {
-      console.error('⚠️ Auth check failed:', error)
-      // Check if there's a local auth token as fallback
       const localAuth = localStorage.getItem('isAuthenticated')
       if (localAuth === 'true') {
-        console.log('🔄 Using fallback local authentication')
         setIsAuthenticated(true)
       } else {
-        console.log('❌ No fallback auth - redirecting to login')
         navigate('/admin-login')
       }
     } finally {

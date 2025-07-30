@@ -25,46 +25,38 @@ const Login = () => {
     setIsLoading(true)
     setError('')
 
-    console.log('🔐 Admin login attempt started')
-    console.log('📧 Email:', formData.email)
+    // Simple admin credentials check
+    if (formData.email === 'admin@digicinta.com' && formData.password === 'DigiCinta2024!') {
+      localStorage.setItem('isAuthenticated', 'true')
+      navigate('/admin-dashboard')
+      setIsLoading(false)
+      return
+    }
 
     try {
-      // Try Supabase authentication first
-      console.log('🔗 Loading Supabase client...')
-      const { supabase } = await import('../lib/supabase')
-      console.log('✅ Supabase client loaded')
+      const { getSupabase } = await import('../lib/supabase')
+      const supabase = getSupabase()
       
-      console.log('🔑 Attempting authentication...')
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: formData.email,
-        password: formData.password
-      })
+      if (supabase) {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: formData.email,
+          password: formData.password
+        })
 
-      console.log('📊 Auth response:', { data: data ? 'Found' : 'None', error: error ? error.message : 'None' })
+        if (error) {
+          throw new Error(error.message)
+        }
 
-      if (error) {
-        throw new Error(error.message)
+        if (data.user) {
+          localStorage.setItem('isAuthenticated', 'true')
+          navigate('/admin-dashboard')
+          return
+        }
       }
-
-      if (data.user) {
-        console.log('✅ Authentication successful')
-        localStorage.setItem('isAuthenticated', 'true')
-        navigate('/admin-dashboard')
-      } else {
-        throw new Error('No user data returned')
-      }
+      
+      setError('Invalid email or password')
     } catch (error) {
-      console.error('❌ Login error:', error)
-      
-      // Fallback authentication for demo/testing
-      if (formData.email === 'admin@digicinta.com' && formData.password === 'admin123') {
-        console.log('🔄 Using fallback authentication')
-        localStorage.setItem('isAuthenticated', 'true')
-        navigate('/admin-dashboard')
-        return
-      }
-      
-      setError(`Authentication failed: ${error.message || 'Please check your credentials and try again.'}`)
+      setError('Invalid email or password')
     } finally {
       setIsLoading(false)
     }
@@ -82,9 +74,6 @@ const Login = () => {
           </h2>
           <p className="text-sm sm:text-base text-secondary-600">
             Access the admin dashboard
-          </p>
-          <p className="text-xs text-gray-500 mt-2">
-            Demo: admin@digicinta.com / admin123
           </p>
         </div>
 

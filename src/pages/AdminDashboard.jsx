@@ -45,7 +45,13 @@ const AdminDashboard = () => {
   const fetchSubmissions = async () => {
     setIsLoading(true)
     try {
-      const { supabase } = await import('../lib/supabase')
+      const { getSupabase } = await import('../lib/supabase')
+      const supabase = getSupabase()
+      
+      if (!supabase) {
+        throw new Error('Supabase not configured')
+      }
+      
       const { data, error } = await supabase
         .from('contact_submissions')
         .select('*')
@@ -124,9 +130,6 @@ const AdminDashboard = () => {
   const services = [...new Set(submissions.map(s => s.service).filter(Boolean))].sort()
   
   // Debug log
-  console.log('Services found:', services)
-  console.log('Current filter:', filterService)
-  console.log('Filtered submissions:', filteredSubmissions.length)
 
   if (isLoading) {
     return (

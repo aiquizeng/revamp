@@ -10,7 +10,13 @@ export const uploadFiles = async (files, submissionId) => {
   }
 
   try {
-    const { supabase } = await import('./supabase')
+    const { getSupabase } = await import('./supabase')
+    const supabase = getSupabase()
+    
+    if (!supabase) {
+      throw new Error('Supabase not configured')
+    }
+    
     const uploadPromises = files.map(async (file, index) => {
       // Create unique filename
       const fileExtension = file.name.split('.').pop()
@@ -53,7 +59,13 @@ export const uploadFiles = async (files, submissionId) => {
  */
 export const getFileUrl = async (filePath) => {
   try {
-    const { supabase } = await import('./supabase')
+    const { getSupabase } = await import('./supabase')
+    const supabase = getSupabase()
+    
+    if (!supabase) {
+      return '#'
+    }
+    
     const { data } = supabase.storage
       .from('contact-files')
       .getPublicUrl(filePath)
@@ -76,7 +88,13 @@ export const deleteFiles = async (filePaths) => {
   }
 
   try {
-    const { supabase } = await import('./supabase')
+    const { getSupabase } = await import('./supabase')
+    const supabase = getSupabase()
+    
+    if (!supabase) {
+      throw new Error('Supabase not configured')
+    }
+    
     const { error } = await supabase.storage
       .from('contact-files')
       .remove(filePaths)
