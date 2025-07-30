@@ -29,27 +29,35 @@ const Login = () => {
       const { getSupabase } = await import('../lib/supabase')
       const supabase = getSupabase()
 
-      if (supabase) {
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email: formData.email,
-          password: formData.password
-        })
+      if (!supabase) {
+        console.error('Supabase client not available')
+        setError('Authentication service unavailable')
+        setIsLoading(false)
+        return
+      }
 
-        if (error) {
-          throw new Error(error.message)
-        }
+      console.log('Attempting Supabase login with:', formData.email)
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: formData.password
+      })
 
-        if (data.user) {
-          localStorage.setItem('isAuthenticated', 'true')
-          navigate('/admin-dashboard')
-          return
-        }
+      if (error) {
+        console.error('Supabase auth error:', error)
+        throw new Error(error.message)
+      }
+
+      if (data.user) {
+        console.log('Login successful:', data.user.email)
+        localStorage.setItem('isAuthenticated', 'true')
+        navigate('/admin-dashboard')
+        return
       }
 
       setError('Invalid email or password')
     } catch (error) {
-      console.log(error)
-      setError('Invalid email or password')
+      console.error('Login error:', error)
+      setError(error.message || 'Invalid email or password')
     } finally {
       setIsLoading(false)
     }
