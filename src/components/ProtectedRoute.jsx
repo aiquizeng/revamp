@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
+import PropTypes from 'prop-types'
 import { supabase } from '../lib/supabase'
 
 const ProtectedRoute = ({ children }) => {
@@ -9,9 +10,9 @@ const ProtectedRoute = ({ children }) => {
 
   useEffect(() => {
     checkAuth()
-  }, [])
+  }, [checkAuth])
 
-  const checkAuth = async () => {
+  const checkAuth = useCallback(async () => {
     try {
       const { data: { session } } = await supabase.auth.getSession()
       const localAuth = localStorage.getItem('isAuthenticated')
@@ -27,7 +28,7 @@ const ProtectedRoute = ({ children }) => {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [navigate])
 
   if (isLoading) {
     return (
@@ -38,6 +39,10 @@ const ProtectedRoute = ({ children }) => {
   }
 
   return isAuthenticated ? children : null
+}
+
+ProtectedRoute.propTypes = {
+  children: PropTypes.node.isRequired
 }
 
 export default ProtectedRoute

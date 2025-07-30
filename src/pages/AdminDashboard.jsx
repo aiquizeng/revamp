@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { getFileUrl } from '../lib/fileUpload'
@@ -7,14 +7,12 @@ import {
   Mail, 
   Building, 
   Calendar, 
-  DollarSign, 
   MessageSquare, 
   Paperclip, 
   Download,
   Eye,
   EyeOff,
   Search,
-  Filter,
   RefreshCw,
   Users,
   Clock
@@ -29,17 +27,17 @@ const AdminDashboard = () => {
   const [selectedSubmission, setSelectedSubmission] = useState(null)
   const [filterService, setFilterService] = useState('')
 
-  useEffect(() => {
-    checkAuth()
-    fetchSubmissions()
-  }, [])
-
-  const checkAuth = () => {
+  const checkAuth = useCallback(() => {
     const isAuthenticated = localStorage.getItem('isAuthenticated')
     if (!isAuthenticated) {
       navigate('/admin-login')
     }
-  }
+  }, [navigate])
+
+  useEffect(() => {
+    checkAuth()
+    fetchSubmissions()
+  }, [checkAuth])
 
   const fetchSubmissions = async () => {
     setIsLoading(true)
