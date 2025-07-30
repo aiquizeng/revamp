@@ -7,8 +7,9 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 let supabaseInstance = null
 
 export const getSupabase = () => {
-  console.log('Supabase URL:', supabaseUrl ? 'Set' : 'Not set')
-  console.log('Supabase Key:', supabaseAnonKey ? 'Set' : 'Not set')
+  console.log('Supabase URL:', supabaseUrl ? 'Set' : 'Not set', supabaseUrl)
+  console.log('Supabase Key:', supabaseAnonKey ? 'Set' : 'Not set', supabaseAnonKey?.substring(0, 20) + '...')
+  console.log('All env vars:', import.meta.env)
   
   if (!supabaseUrl || !supabaseAnonKey) {
     logger.warn('Supabase environment variables not configured')
