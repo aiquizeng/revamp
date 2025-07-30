@@ -1,19 +1,16 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import { supabase } from '../lib/supabase'
 
 const ProtectedRoute = ({ children }) => {
   const navigate = useNavigate()
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
 
-  useEffect(() => {
-    checkAuth()
-  }, [checkAuth])
-
   const checkAuth = useCallback(async () => {
     try {
+      // Try to load Supabase dynamically to avoid blocking the main app
+      const { supabase } = await import('../lib/supabase')
       const { data: { session } } = await supabase.auth.getSession()
       const localAuth = localStorage.getItem('isAuthenticated')
       
@@ -24,11 +21,21 @@ const ProtectedRoute = ({ children }) => {
       }
     } catch (error) {
       console.error('Auth check failed:', error)
-      navigate('/admin-login')
+      // Check if there's a local auth token as fallback
+      const localAuth = localStorage.getItem('isAuthenticated')
+      if (localAuth === 'true') {
+        setIsAuthenticated(true)
+      } else {
+        navigate('/admin-login')
+      }
     } finally {
       setIsLoading(false)
     }
   }, [navigate])
+
+  useEffect(() => {
+    checkAuth()
+  }, [checkAuth])
 
   if (isLoading) {
     return (

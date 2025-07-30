@@ -12,21 +12,38 @@ import AdminDashboard from './pages/AdminDashboard'
 function App() {
   return (
     <Routes>
+      {/* Admin routes without layout */}
       <Route path="/admin-login" element={<Login />} />
       <Route path="/admin-dashboard" element={
         <ProtectedRoute>
           <AdminDashboard />
         </ProtectedRoute>
       } />
-      <Route path="/*" element={
+      
+      {/* Main site routes with layout */}
+      <Route path="/" element={
         <Layout>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/portfolio" element={<Portfolio />} />
-            <Route path="/contact" element={<Contact />} />
-          </Routes>
+          <Home />
+        </Layout>
+      } />
+      <Route path="/services" element={
+        <Layout>
+          <Services />
+        </Layout>
+      } />
+      <Route path="/about" element={
+        <Layout>
+          <About />
+        </Layout>
+      } />
+      <Route path="/portfolio" element={
+        <Layout>
+          <Portfolio />
+        </Layout>
+      } />
+      <Route path="/contact" element={
+        <Layout>
+          <Contact />
         </Layout>
       } />
     </Routes>
