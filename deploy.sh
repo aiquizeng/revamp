@@ -49,6 +49,11 @@ check_permissions() {
 check_prerequisites() {
     log "Checking prerequisites..."
     
+    # Check if git is installed
+    if ! command -v git &> /dev/null; then
+        error "git is not installed. Please install git first."
+    fi
+    
     # Check if npm is installed
     if ! command -v npm &> /dev/null; then
         error "npm is not installed. Please install Node.js and npm first."
@@ -65,6 +70,83 @@ check_prerequisites() {
     fi
     
     success "Prerequisites check passed"
+}
+
+# Clean workspace and pull latest changes
+update_code() {
+    log "Updating code from Git repository..."
+    
+    # Discard any local changes
+    if git status --porcelain | grep -q .; then
+        warning "Found local changes, discarding them..."
+        git reset --hard HEAD
+        git clean -fd
+    fi
+    
+    # Pull latest changes
+    log "Pulling latest changes from origin..."
+    if git pull origin main; then
+        success "Code updated successfully"
+    else
+        error "Failed to pull latest changes from Git"
+    fi
+}
+
+# Setup environment file
+setup_environment() {
+    log "Setting up environment configuration..."
+    
+    # Check if .env already exists
+    if [[ -f ".env" ]]; then
+        warning ".env file already exists"
+        read -p "Do you want to recreate it? (y/N): " -n 1 -r
+        echo
+        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+            log "Keeping existing .env file"
+            return 0
+        fi
+        rm -f .env
+    fi
+    
+    # Check if .env.example exists
+    if [[ ! -f ".env.example" ]]; then
+        error ".env.example file not found. Cannot create environment file."
+    fi
+    
+    log "Creating .env file from .env.example..."
+    cp .env.example .env
+    
+    echo
+    echo "==================================="
+    echo -e "${YELLOW}Environment Configuration${NC}"
+    echo "==================================="
+    echo "Please provide the following environment variables:"
+    echo
+    
+    # Read Supabase URL
+    while true; do
+        read -p "Enter VITE_SUPABASE_URL: " supabase_url
+        if [[ -n "$supabase_url" ]]; then
+            break
+        fi
+        warning "VITE_SUPABASE_URL cannot be empty"
+    done
+    
+    # Read Supabase Anon Key
+    while true; do
+        read -p "Enter VITE_SUPABASE_ANON_KEY: " supabase_key
+        if [[ -n "$supabase_key" ]]; then
+            break
+        fi
+        warning "VITE_SUPABASE_ANON_KEY cannot be empty"
+    done
+    
+    # Update .env file
+    sed -i "s|VITE_SUPABASE_URL=.*|VITE_SUPABASE_URL=$supabase_url|" .env
+    sed -i "s|VITE_SUPABASE_ANON_KEY=.*|VITE_SUPABASE_ANON_KEY=$supabase_key|" .env
+    
+    success "Environment file created successfully"
+    echo
 }
 
 # Install dependencies
@@ -88,10 +170,21 @@ run_lint() {
 build_project() {
     log "Building the project..."
     
-    # Clean previous build
+    # Clean previous build and node_modules for fresh build
     if [[ -d "$BUILD_DIR" ]]; then
         rm -rf "$BUILD_DIR"
         log "Cleaned previous build directory"
+    fi
+    
+    if [[ -d "node_modules" ]]; then
+        log "Cleaning node_modules for fresh build..."
+        rm -rf node_modules
+    fi
+    
+    # Reinstall dependencies to ensure clean state
+    log "Installing dependencies for build..."
+    if ! npm ci; then
+        error "Failed to install dependencies"
     fi
     
     # Run build
@@ -105,6 +198,10 @@ build_project() {
     if [[ ! -d "$BUILD_DIR" ]] || [[ -z "$(ls -A $BUILD_DIR)" ]]; then
         error "Build directory is empty or doesn't exist"
     fi
+    
+    # Show build contents for verification
+    log "Build contents:"
+    ls -la "$BUILD_DIR"
 }
 
 # Create backup of current deployment
@@ -222,7 +319,8 @@ main() {
     # Run all deployment steps
     check_permissions
     check_prerequisites
-    install_dependencies
+    update_code
+    setup_environment
     run_lint
     build_project
     create_backup
