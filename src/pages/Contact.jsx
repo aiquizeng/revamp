@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Mail, MapPin, Clock, Send, CheckCircle, Upload, X, AlertCircle, Loader2 } from 'lucide-react'
+import { supabase } from '../lib/supabase'
+import { uploadFiles } from '../lib/fileUpload'
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -76,34 +78,77 @@ const Contact = () => {
     setSubmitError('')
     
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      
-      // Simulate random success/failure for demo
-      if (Math.random() > 0.2) {
-        console.log('Form submitted:', { formData, files: uploadedFiles })
-        setIsSubmitted(true)
-        
-        // Clear form and localStorage after successful submission
-        setTimeout(() => {
-          setIsSubmitted(false)
-          setFormData({
-            name: '',
-            email: '',
-            company: '',
-            service: '',
-            budget: '',
-            timeline: '',
-            revenue: '',
-            message: ''
-          })
-          setUploadedFiles([])
-          localStorage.removeItem('contactFormData')
-        }, 5000)
-      } else {
-        throw new Error('Network error. Please try again.')
+      // Validate required fields
+      if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
+        throw new Error('Please fill in all required fields.')
       }
+
+      // Validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      if (!emailRegex.test(formData.email)) {
+        throw new Error('Please enter a valid email address.')
+      }
+
+      // Generate unique submission ID
+      const submissionId = `sub_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+
+      // Upload files first (if any)
+      let uploadedFileData = []
+      if (uploadedFiles.length > 0) {
+        try {
+          uploadedFileData = await uploadFiles(uploadedFiles, submissionId)
+        } catch (uploadError) {
+          throw new Error(`File upload failed: ${uploadError.message}`)
+        }
+      }
+
+      // Prepare submission data
+      const submissionData = {
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        company: formData.company.trim() || null,
+        service: formData.service || null,
+        budget: formData.budget || null,
+        timeline: formData.timeline || null,
+        revenue: formData.revenue || null,
+        message: formData.message.trim(),
+        created_at: new Date().toISOString(),
+        files_count: uploadedFiles.length,
+        files_data: uploadedFileData.length > 0 ? JSON.stringify(uploadedFileData) : null
+      }
+
+      // Submit to Supabase
+      const { data, error } = await supabase
+        .from('contact_submissions')
+        .insert([submissionData])
+        .select()
+
+      if (error) {
+        throw new Error(error.message || 'Failed to submit form. Please try again.')
+      }
+
+      console.log('Form submitted successfully:', data)
+      setIsSubmitted(true)
+      
+      // Clear form and localStorage after successful submission
+      setTimeout(() => {
+        setIsSubmitted(false)
+        setFormData({
+          name: '',
+          email: '',
+          company: '',
+          service: '',
+          budget: '',
+          timeline: '',
+          revenue: '',
+          message: ''
+        })
+        setUploadedFiles([])
+        localStorage.removeItem('contactFormData')
+      }, 5000)
+      
     } catch (error) {
+      console.error('Form submission error:', error)
       setSubmitError(error.message)
     } finally {
       setIsLoading(false)
@@ -143,32 +188,32 @@ const Contact = () => {
   return (
     <div className="py-20">
       <div className="section-container">
-        <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold text-secondary-900 mb-6">
+        <div className="text-center mb-8 sm:mb-12 lg:mb-16">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-secondary-900 mb-4 sm:mb-6">
             Get In <span className="text-gradient">Touch</span>
           </h1>
-          <p className="text-xl text-secondary-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-lg lg:text-xl text-secondary-600 max-w-3xl mx-auto leading-relaxed px-4">
             Ready to transform your business? Let's discuss your project and explore 
             how DigiCinta can help you achieve your digital goals.
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-12">
+        <div className="grid lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-12">
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-2xl shadow-lg p-8">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-secondary-900">
+            <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 gap-3">
+                <h2 className="text-xl sm:text-2xl font-bold text-secondary-900">
                   Send us a message
                 </h2>
-                <div className="flex items-center space-x-3">
-                  <span className="text-sm text-secondary-600">Progress</span>
-                  <div className="w-24 h-2 bg-gray-200 rounded-full overflow-hidden">
+                <div className="flex items-center space-x-2 sm:space-x-3">
+                  <span className="text-xs sm:text-sm text-secondary-600">Progress</span>
+                  <div className="w-16 sm:w-24 h-2 bg-gray-200 rounded-full overflow-hidden">
                     <div 
                       className="h-full bg-gradient-to-r from-primary-500 to-primary-600 transition-all duration-500 ease-out"
                       style={{ width: `${formProgress}%` }}
                     ></div>
                   </div>
-                  <span className="text-sm font-medium text-primary-600">{formProgress}%</span>
+                  <span className="text-xs sm:text-sm font-medium text-primary-600">{formProgress}%</span>
                 </div>
               </div>
               
@@ -200,8 +245,8 @@ const Contact = () => {
                     </div>
                   )}
                   
-                  <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-6">
+                  <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+                  <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
                     <div>
                       <label htmlFor="name" className="block text-sm font-medium text-secondary-700 mb-2">
                         Full Name *
@@ -213,7 +258,7 @@ const Contact = () => {
                         required
                         value={formData.name}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
+                        className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
                         placeholder="John Doe"
                       />
                     </div>
@@ -229,13 +274,13 @@ const Contact = () => {
                         required
                         value={formData.email}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
+                        className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
                         placeholder="john@company.com"
                       />
                     </div>
                   </div>
 
-                  <div className="grid md:grid-cols-2 gap-6">
+                  <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
                     <div>
                       <label htmlFor="company" className="block text-sm font-medium text-secondary-700 mb-2">
                         Company
@@ -246,7 +291,7 @@ const Contact = () => {
                         name="company"
                         value={formData.company}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
+                        className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
                         placeholder="Your Company"
                       />
                     </div>
@@ -260,7 +305,7 @@ const Contact = () => {
                         name="service"
                         value={formData.service}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
+                        className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
                       >
                         <option value="">Select a service</option>
                         {services.map((service) => (
@@ -333,10 +378,10 @@ const Contact = () => {
                       id="message"
                       name="message"
                       required
-                      rows={6}
+                      rows={4}
                       value={formData.message}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200 resize-none"
+                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200 resize-none sm:rows-6"
                       placeholder="Tell us about your project or question..."
                     />
                   </div>
@@ -344,7 +389,7 @@ const Contact = () => {
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="btn-primary flex items-center justify-center w-full disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="btn-primary flex items-center justify-center w-full disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base py-2.5 sm:py-3"
                   >
                     {isLoading ? (
                       <>
@@ -372,9 +417,9 @@ const Contact = () => {
             </div>
           </div>
 
-          <div className="space-y-8">
-            <div className="bg-white rounded-2xl shadow-lg p-8">
-              <h3 className="text-xl font-bold text-secondary-900 mb-6">
+          <div className="space-y-6 sm:space-y-8">
+            <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8">
+              <h3 className="text-lg sm:text-xl font-bold text-secondary-900 mb-4 sm:mb-6">
                 Contact Information
               </h3>
               
