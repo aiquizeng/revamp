@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { supabase } from '../lib/supabase'
 import { Eye, EyeOff, Lock, Mail, AlertCircle, Loader2 } from 'lucide-react'
 
 const Login = () => {
@@ -27,6 +26,7 @@ const Login = () => {
     setError('')
 
     try {
+      const { supabase } = await import('../lib/supabase')
       const { data, error } = await supabase.auth.signInWithPassword({
         email: formData.email,
         password: formData.password

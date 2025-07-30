@@ -1,5 +1,3 @@
-import { supabase } from './supabase'
-
 /**
  * Upload files to Supabase Storage
  * @param {File[]} files - Array of files to upload
@@ -12,6 +10,7 @@ export const uploadFiles = async (files, submissionId) => {
   }
 
   try {
+    const { supabase } = await import('./supabase')
     const uploadPromises = files.map(async (file, index) => {
       // Create unique filename
       const fileExtension = file.name.split('.').pop()
@@ -52,12 +51,18 @@ export const uploadFiles = async (files, submissionId) => {
  * @param {string} filePath - Path to file in storage
  * @returns {string} Public URL
  */
-export const getFileUrl = (filePath) => {
-  const { data } = supabase.storage
-    .from('contact-files')
-    .getPublicUrl(filePath)
-  
-  return data.publicUrl
+export const getFileUrl = async (filePath) => {
+  try {
+    const { supabase } = await import('./supabase')
+    const { data } = supabase.storage
+      .from('contact-files')
+      .getPublicUrl(filePath)
+    
+    return data.publicUrl
+  } catch (error) {
+    console.error('Error getting file URL:', error)
+    return '#'
+  }
 }
 
 /**
@@ -71,6 +76,7 @@ export const deleteFiles = async (filePaths) => {
   }
 
   try {
+    const { supabase } = await import('./supabase')
     const { error } = await supabase.storage
       .from('contact-files')
       .remove(filePaths)

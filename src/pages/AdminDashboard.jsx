@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { supabase } from '../lib/supabase'
 import { getFileUrl } from '../lib/fileUpload'
 import { 
   LogOut, 
@@ -36,12 +35,17 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     checkAuth()
-    fetchSubmissions()
+    fetchSubmissions().catch(error => {
+      console.error('Failed to fetch submissions:', error)
+      setError('Failed to load submissions')
+      setIsLoading(false)
+    })
   }, [checkAuth])
 
   const fetchSubmissions = async () => {
     setIsLoading(true)
     try {
+      const { supabase } = await import('../lib/supabase')
       const { data, error } = await supabase
         .from('contact_submissions')
         .select('*')
@@ -62,6 +66,7 @@ const AdminDashboard = () => {
 
   const handleLogout = async () => {
     try {
+      const { supabase } = await import('../lib/supabase')
       await supabase.auth.signOut()
     } catch (error) {
       console.error('Logout error:', error)
@@ -89,15 +94,19 @@ const AdminDashboard = () => {
     }
   }
 
-  const downloadFile = (filePath, originalName) => {
-    const publicUrl = getFileUrl(filePath)
-    const link = document.createElement('a')
-    link.href = publicUrl
-    link.download = originalName
-    link.target = '_blank'
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
+  const downloadFile = async (filePath, originalName) => {
+    try {
+      const publicUrl = await getFileUrl(filePath)
+      const link = document.createElement('a')
+      link.href = publicUrl
+      link.download = originalName
+      link.target = '_blank'
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+    } catch (error) {
+      console.error('Failed to download file:', error)
+    }
   }
 
   const filteredSubmissions = submissions.filter(submission => {
