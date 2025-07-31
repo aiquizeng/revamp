@@ -16,7 +16,7 @@ class Logger {
   error(message, ...args) {
     // Always log errors, even in production
     console.error(message, ...args)
-    
+
     // In production, you could send to error tracking service
     // if (!isDevelopment) {
     //   sendToErrorTracking(message, args)
