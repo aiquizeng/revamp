@@ -4,6 +4,14 @@ import { logger } from './logger'
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
+// Debug logging
+logger.info('Environment check:', {
+  hasUrl: !!supabaseUrl,
+  hasKey: !!supabaseAnonKey,
+  url: supabaseUrl,
+  envMode: import.meta.env.MODE
+})
+
 let supabaseInstance = null
 
 export const getSupabase = () => {
@@ -13,7 +21,9 @@ export const getSupabase = () => {
   
   if (!supabaseInstance) {
     try {
+      logger.info('Creating Supabase client with URL:', url ? 'URL found' : 'Using fallback URL')
       supabaseInstance = createClient(url, key)
+      logger.info('Supabase client created successfully')
     } catch (error) {
       logger.error('Failed to create Supabase client:', error)
       return null
