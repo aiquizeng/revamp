@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { useScrollAnimation } from '../hooks/useScrollAnimation'
 
 const TrustedCompanies = () => {
@@ -64,4 +65,4 @@ const TrustedCompanies = () => {
   )
 }
 
-export default TrustedCompanies
+export default memo(TrustedCompanies)

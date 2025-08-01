@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { Link } from 'react-router-dom'
 import { Mail, MapPin, Linkedin } from 'lucide-react'
 
@@ -117,4 +118,4 @@ const Footer = () => {
   )
 }
 
-export default Footer
+export default memo(Footer)

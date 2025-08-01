@@ -26,25 +26,16 @@ const Login = () => {
     setError('')
 
     try {
-      const { getSupabase } = await import('../lib/supabase')
-      const supabase = getSupabase()
+      const { signInWithEmailAndPassword } = await import('firebase/auth')
+      const { auth } = await import('../lib/firebase')
 
-      if (!supabase) {
-        setError('Authentication service unavailable')
-        setIsLoading(false)
-        return
-      }
+      const userCredential = await signInWithEmailAndPassword(
+        auth, 
+        formData.email, 
+        formData.password
+      )
 
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: formData.email,
-        password: formData.password
-      })
-
-      if (error) {
-        throw new Error(error.message)
-      }
-
-      if (data.user) {
+      if (userCredential.user) {
         localStorage.setItem('isAuthenticated', 'true')
         navigate('/admin-dashboard')
         return

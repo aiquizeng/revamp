@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getFileUrl } from '../lib/fileUpload'
 import { logger } from '../lib/logger'
 import { 
   LogOut, 
@@ -8,14 +7,17 @@ import {
   Building, 
   Calendar, 
   MessageSquare, 
-  Paperclip, 
-  Download,
   Eye,
   EyeOff,
   Search,
   RefreshCw,
   Users,
-  Clock
+  Clock,
+  TrendingUp,
+  Filter,
+  MoreVertical,
+  Star,
+  Activity
 } from 'lucide-react'
 
 const AdminDashboard = () => {
@@ -46,21 +48,17 @@ const AdminDashboard = () => {
   const fetchSubmissions = async () => {
     setIsLoading(true)
     try {
-      const { getSupabase } = await import('../lib/supabase')
-      const supabase = getSupabase()
+      const { collection, getDocs, orderBy, query } = await import('firebase/firestore')
+      const { db } = await import('../lib/firebase')
       
-      if (!supabase) {
-        throw new Error('Supabase not configured')
-      }
+      const submissionsRef = collection(db, 'contact_submissions')
+      const q = query(submissionsRef, orderBy('created_at', 'desc'))
+      const querySnapshot = await getDocs(q)
       
-      const { data, error } = await supabase
-        .from('contact_submissions')
-        .select('*')
-        .order('created_at', { ascending: false })
-
-      if (error) {
-        throw new Error(error.message)
-      }
+      const data = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }))
 
       setSubmissions(data || [])
     } catch (error) {
@@ -73,8 +71,9 @@ const AdminDashboard = () => {
 
   const handleLogout = async () => {
     try {
-      const { supabase } = await import('../lib/supabase')
-      await supabase.auth.signOut()
+      const { signOut } = await import('firebase/auth')
+      const { auth } = await import('../lib/firebase')
+      await signOut(auth)
     } catch (error) {
       logger.error('Logout error:', error)
     }
@@ -92,29 +91,6 @@ const AdminDashboard = () => {
     })
   }
 
-  const parseFiles = (filesData) => {
-    if (!filesData) return []
-    try {
-      return JSON.parse(filesData)
-    } catch {
-      return []
-    }
-  }
-
-  const downloadFile = async (filePath, originalName) => {
-    try {
-      const publicUrl = await getFileUrl(filePath)
-      const link = document.createElement('a')
-      link.href = publicUrl
-      link.download = originalName
-      link.target = '_blank'
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-    } catch (error) {
-      logger.error('Failed to download file:', error)
-    }
-  }
 
   const filteredSubmissions = submissions.filter(submission => {
     const matchesSearch = !searchTerm || 
@@ -134,260 +110,387 @@ const AdminDashboard = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="flex items-center space-x-3">
-          <RefreshCw className="animate-spin" size={24} />
-          <span>Loading submissions...</span>
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+            <RefreshCw className="animate-spin text-white" size={28} />
+          </div>
+          <h3 className="text-xl font-semibold text-gray-900 mb-2">Loading Dashboard</h3>
+          <p className="text-gray-600 mb-6">Fetching your contact submissions...</p>
+          <div className="flex items-center justify-center space-x-2">
+            <div className="w-2 h-2 bg-primary-500 rounded-full animate-bounce"></div>
+            <div className="w-2 h-2 bg-primary-500 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+            <div className="w-2 h-2 bg-primary-500 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+          </div>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
+      <div className="bg-white shadow-lg border-b border-gray-200 backdrop-blur-sm bg-white/95">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-xl sm:text-2xl font-bold text-secondary-900">Admin Dashboard</h1>
-              <p className="text-sm sm:text-base text-secondary-600 hidden sm:block">Manage contact form submissions</p>
+            <div className="flex items-center space-x-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center shadow-lg">
+                <Activity className="text-white" size={24} />
+              </div>
+              <div>
+                <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary-600 to-primary-800 bg-clip-text text-transparent">
+                  Admin Dashboard
+                </h1>
+                <p className="text-sm sm:text-base text-secondary-600 flex items-center space-x-2">
+                  <span>Manage contact submissions</span>
+                  {submissions.length > 0 && (
+                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800">
+                      {submissions.length} total
+                    </span>
+                  )}
+                </p>
+              </div>
             </div>
-            <button
-              onClick={handleLogout}
-              className="flex items-center space-x-1 sm:space-x-2 px-3 sm:px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200 text-sm sm:text-base"
-            >
-              <LogOut size={16} className="sm:hidden" />
-              <LogOut size={18} className="hidden sm:block" />
-              <span className="hidden sm:inline">Logout</span>
-            </button>
+            <div className="flex items-center space-x-3">
+              <button
+                onClick={() => window.location.reload()}
+                className="flex items-center space-x-2 px-3 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-all duration-200"
+                title="Refresh"
+              >
+                <RefreshCw size={18} />
+                <span className="hidden sm:inline">Refresh</span>
+              </button>
+              <button
+                onClick={handleLogout}
+                className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg hover:from-red-600 hover:to-red-700 transition-all duration-200 shadow-lg hover:shadow-xl text-sm sm:text-base"
+              >
+                <LogOut size={18} />
+                <span className="hidden sm:inline">Logout</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
         {/* Stats */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
-          <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6">
-            <div className="flex items-center">
-              <Users className="text-primary-600" size={20} />
-              <div className="ml-3 sm:ml-4">
-                <p className="text-xs sm:text-sm font-medium text-secondary-600">Total Submissions</p>
-                <p className="text-xl sm:text-2xl font-bold text-secondary-900">{submissions.length}</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-all duration-300 group">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600 mb-1">Total Submissions</p>
+                <p className="text-3xl font-bold text-gray-900">{submissions.length}</p>
+                <p className="text-xs text-primary-600 mt-2 flex items-center">
+                  <TrendingUp size={12} className="mr-1" />
+                  All time
+                </p>
+              </div>
+              <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <Users className="text-white" size={24} />
               </div>
             </div>
           </div>
           
-          <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6">
-            <div className="flex items-center">
-              <Clock className="text-green-600" size={20} />
-              <div className="ml-3 sm:ml-4">
-                <p className="text-xs sm:text-sm font-medium text-secondary-600">This Month</p>
-                <p className="text-xl sm:text-2xl font-bold text-secondary-900">
+          <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-all duration-300 group">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600 mb-1">This Month</p>
+                <p className="text-3xl font-bold text-gray-900">
                   {submissions.filter(s => new Date(s.created_at).getMonth() === new Date().getMonth()).length}
                 </p>
+                <p className="text-xs text-green-600 mt-2 flex items-center">
+                  <Calendar size={12} className="mr-1" />
+                  Current month
+                </p>
+              </div>
+              <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <Clock className="text-white" size={24} />
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6">
-            <div className="flex items-center">
-              <Paperclip className="text-blue-600" size={20} />
-              <div className="ml-3 sm:ml-4">
-                <p className="text-xs sm:text-sm font-medium text-secondary-600">With Attachments</p>
-                <p className="text-xl sm:text-2xl font-bold text-secondary-900">
-                  {submissions.filter(s => s.files_count > 0).length}
+          <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-all duration-300 group">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600 mb-1">This Week</p>
+                <p className="text-3xl font-bold text-gray-900">
+                  {submissions.filter(s => {
+                    const submissionDate = new Date(s.created_at)
+                    const weekStart = new Date()
+                    weekStart.setDate(weekStart.getDate() - weekStart.getDay())
+                    return submissionDate >= weekStart
+                  }).length}
                 </p>
+                <p className="text-xs text-blue-600 mt-2 flex items-center">
+                  <Activity size={12} className="mr-1" />
+                  Recent activity
+                </p>
+              </div>
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <TrendingUp className="text-white" size={24} />
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-all duration-300 group">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600 mb-1">Services</p>
+                <p className="text-3xl font-bold text-gray-900">{services.length}</p>
+                <p className="text-xs text-purple-600 mt-2 flex items-center">
+                  <Building size={12} className="mr-1" />
+                  Categories
+                </p>
+              </div>
+              <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <Star className="text-white" size={24} />
               </div>
             </div>
           </div>
         </div>
 
-        {/* Filters */}
-        <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 mb-4 sm:mb-6">
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+        {/* Enhanced Filters */}
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 mb-8">
+          <div className="flex items-center space-x-3 mb-4">
+            <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-primary-600 rounded-lg flex items-center justify-center">
+              <Filter className="text-white" size={16} />
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900">Filter & Search</h3>
+          </div>
+          
+          <div className="flex flex-col lg:flex-row gap-4">
             <div className="flex-1">
+              <label className="block text-sm font-medium text-gray-700 mb-2">Search submissions</label>
               <div className="relative">
-                <Search className="absolute left-3 top-2.5 text-gray-400 pointer-events-none z-10" size={18} />
+                <Search className="absolute left-3 top-3 text-gray-400 pointer-events-none z-10" size={18} />
                 <input
                   type="text"
-                  placeholder="Search submissions..."
+                  placeholder="Search by name, email, company, or message..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 sm:py-2.5 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 relative z-0"
+                  className="w-full pl-10 pr-4 py-3 text-sm border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 bg-gray-50/50 hover:bg-white focus:bg-white shadow-sm"
                 />
               </div>
             </div>
             
-            <div className="w-full sm:w-64">
-              <select
-                value={filterService}
-                onChange={(e) => setFilterService(e.target.value)}
-                className="w-full px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white appearance-none cursor-pointer"
-              >
-                <option value="">All Services ({submissions.length})</option>
-                {services.length > 0 ? (
-                  services.map(service => (
-                    <option key={service} value={service}>
-                      {service} ({submissions.filter(s => s.service === service).length})
-                    </option>
-                  ))
-                ) : (
-                  <option disabled>No services available</option>
-                )}
-              </select>
+            <div className="w-full lg:w-72">
+              <label className="block text-sm font-medium text-gray-700 mb-2">Filter by service</label>
+              <div className="relative">
+                <Filter className="absolute left-3 top-3 text-gray-400 pointer-events-none z-10" size={18} />
+                <select
+                  value={filterService}
+                  onChange={(e) => setFilterService(e.target.value)}
+                  className="w-full pl-10 pr-4 py-3 text-sm border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-gray-50/50 hover:bg-white focus:bg-white appearance-none cursor-pointer transition-all duration-200 shadow-sm"
+                >
+                  <option value="">All Services ({submissions.length})</option>
+                  {services.length > 0 ? (
+                    services.map(service => (
+                      <option key={service} value={service}>
+                        {service} ({submissions.filter(s => s.service === service).length})
+                      </option>
+                    ))
+                  ) : (
+                    <option disabled>No services available</option>
+                  )}
+                </select>
+              </div>
             </div>
 
-            <button
-              onClick={fetchSubmissions}
-              className="flex items-center justify-center space-x-1 sm:space-x-2 px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors duration-200"
-            >
-              <RefreshCw size={16} />
-              <span className="hidden sm:inline">Refresh</span>
-            </button>
+            <div className="flex items-end">
+              <button
+                onClick={fetchSubmissions}
+                className="flex items-center justify-center space-x-2 px-6 py-3 bg-gradient-to-r from-primary-600 to-primary-700 text-white rounded-xl hover:from-primary-700 hover:to-primary-800 transition-all duration-200 shadow-lg hover:shadow-xl font-medium"
+              >
+                <RefreshCw size={18} />
+                <span>Refresh</span>
+              </button>
+            </div>
           </div>
+          
+          {(searchTerm || filterService) && (
+            <div className="mt-4 pt-4 border-t border-gray-200">
+              <div className="flex items-center justify-between text-sm text-gray-600">
+                <span>Showing {filteredSubmissions.length} of {submissions.length} submissions</span>
+                {(searchTerm || filterService) && (
+                  <button
+                    onClick={() => {
+                      setSearchTerm('')
+                      setFilterService('')
+                    }}
+                    className="text-primary-600 hover:text-primary-700 font-medium"
+                  >
+                    Clear filters
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
         </div>
 
         {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-            <p className="text-red-800">{error}</p>
+          <div className="bg-gradient-to-r from-red-50 to-red-100 border border-red-200 rounded-2xl p-6 mb-8 shadow-lg">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-red-500 rounded-xl flex items-center justify-center flex-shrink-0">
+                <i className="text-white">⚠️</i>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-red-900 mb-1">Error Loading Data</h3>
+                <p className="text-red-800">{error}</p>
+              </div>
+            </div>
           </div>
         )}
 
-        {/* Submissions List */}
-        <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-          <div className="px-4 sm:px-6 py-3 sm:py-4 border-b bg-gray-50">
-            <h2 className="text-base sm:text-lg font-semibold text-secondary-900">
-              Contact Submissions ({filteredSubmissions.length})
-            </h2>
+        {/* Enhanced Submissions List */}
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+          <div className="px-6 py-5 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-primary-600 rounded-lg flex items-center justify-center">
+                  <MessageSquare className="text-white" size={16} />
+                </div>
+                <div>
+                  <h2 className="text-lg font-semibold text-gray-900">
+                    Contact Submissions
+                  </h2>
+                  <p className="text-sm text-gray-600">{filteredSubmissions.length} submissions found</p>
+                </div>
+              </div>
+              {filteredSubmissions.length > 0 && (
+                <div className="flex items-center space-x-2 text-sm text-gray-500">
+                  <Clock size={14} />
+                  <span>Latest first</span>
+                </div>
+              )}
+            </div>
           </div>
 
           {filteredSubmissions.length === 0 ? (
-            <div className="p-8 sm:p-12 text-center">
-              <Users className="mx-auto text-gray-400 mb-4" size={36} />
-              <p className="text-sm sm:text-base text-gray-600">No submissions found</p>
+            <div className="p-12 text-center">
+              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Users className="text-gray-400" size={24} />
+              </div>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">No submissions found</h3>
+              <p className="text-gray-600">
+                {searchTerm || filterService 
+                  ? "Try adjusting your search or filter criteria" 
+                  : "Contact submissions will appear here when received"
+                }
+              </p>
             </div>
           ) : (
-            <div className="divide-y divide-gray-200">
-              {filteredSubmissions.map((submission) => (
-                <div key={submission.id} className="p-4 sm:p-6 hover:bg-gray-50 transition-colors duration-200">
+            <div className="divide-y divide-gray-100">
+              {filteredSubmissions.map((submission, index) => (
+                <div key={submission.id} className="p-6 hover:bg-gradient-to-r hover:from-gray-50 hover:to-white transition-all duration-200 group">
                   <div className="flex items-start justify-between">
-                    <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-                      {/* Left Column */}
-                      <div className="space-y-2 sm:space-y-3">
-                        <div className="flex items-center space-x-2 sm:space-x-3">
-                          <Mail className="text-primary-600 flex-shrink-0" size={16} />
-                          <div className="min-w-0">
-                            <p className="font-semibold text-sm sm:text-base text-secondary-900 truncate">{submission.name}</p>
-                            <p className="text-xs sm:text-sm text-secondary-600 truncate">{submission.email}</p>
+                    <div className="flex-1">
+                      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        {/* Contact Info */}
+                        <div className="lg:col-span-1 space-y-3">
+                          <div className="flex items-start space-x-3">
+                            <div className="w-10 h-10 bg-gradient-to-br from-primary-100 to-primary-200 rounded-xl flex items-center justify-center flex-shrink-0">
+                              <Mail className="text-primary-600" size={16} />
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <p className="font-semibold text-gray-900 truncate">{submission.name}</p>
+                              <p className="text-sm text-gray-600 truncate">{submission.email}</p>
+                            </div>
                           </div>
-                        </div>
 
-                        <div className="flex items-center space-x-2 sm:space-x-3">
-                          <Building className="text-secondary-500 flex-shrink-0" size={16} />
-                          <span className="text-xs sm:text-sm text-secondary-700 truncate">
-                            {submission.company || 'No company'}
-                          </span>
-                        </div>
-
-                        <div className="flex items-center space-x-2 sm:space-x-3">
-                          <Calendar className="text-secondary-500 flex-shrink-0" size={16} />
-                          <span className="text-xs sm:text-sm text-secondary-700">
-                            {formatDate(submission.created_at)}
-                          </span>
-                        </div>
-
-                        {submission.service && (
-                          <div className="inline-block">
-                            <span className="px-2 sm:px-3 py-1 bg-primary-100 text-primary-800 rounded-full text-xs sm:text-sm font-medium">
-                              {submission.service}
+                          <div className="flex items-center space-x-3 text-sm text-gray-600">
+                            <Building className="flex-shrink-0" size={14} />
+                            <span className="truncate">
+                              {submission.company || 'No company specified'}
                             </span>
                           </div>
-                        )}
-                      </div>
 
-                      {/* Right Column */}
-                      <div className="space-y-3">
-                        <div>
-                          <div className="flex items-center space-x-2 mb-2">
-                            <MessageSquare className="text-secondary-500" size={18} />
-                            <span className="font-medium text-secondary-700">Message</span>
+                          <div className="flex items-center space-x-3 text-sm text-gray-600">
+                            <Calendar className="flex-shrink-0" size={14} />
+                            <span>{formatDate(submission.created_at)}</span>
                           </div>
-                          <p className="text-secondary-700 text-sm leading-relaxed">
-                            {submission.message.length > 150 
-                              ? `${submission.message.substring(0, 150)}...` 
-                              : submission.message
-                            }
-                          </p>
+
+                          {submission.service && (
+                            <div className="inline-flex items-center px-3 py-1 bg-gradient-to-r from-primary-100 to-primary-200 text-primary-800 rounded-full text-sm font-medium">
+                              <Star className="mr-1" size={12} />
+                              {submission.service}
+                            </div>
+                          )}
                         </div>
 
-                        {submission.files_count > 0 && (
-                          <div>
-                            <div className="flex items-center space-x-2 mb-2">
-                              <Paperclip className="text-secondary-500" size={18} />
-                              <span className="font-medium text-secondary-700">
-                                {submission.files_count} Attachment(s)
-                              </span>
+                        {/* Message Preview */}
+                        <div className="lg:col-span-2">
+                          <div className="flex items-start space-x-3">
+                            <div className="w-10 h-10 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex items-center justify-center flex-shrink-0">
+                              <MessageSquare className="text-gray-600" size={16} />
                             </div>
-                            
-                            {submission.files_data && (
-                              <div className="space-y-2">
-                                {parseFiles(submission.files_data).map((file, index) => (
-                                  <button
-                                    key={index}
-                                    onClick={() => downloadFile(file.storagePath, file.originalName)}
-                                    className="flex items-center space-x-2 text-sm text-primary-600 hover:text-primary-700 transition-colors duration-200"
-                                  >
-                                    <Download size={14} />
-                                    <span>{file.originalName}</span>
-                                    <span className="text-xs text-gray-500">
-                                      ({(file.size / 1024 / 1024).toFixed(2)} MB)
-                                    </span>
-                                  </button>
-                                ))}
+                            <div className="flex-1">
+                              <h4 className="font-medium text-gray-900 mb-2">Message</h4>
+                              <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">
+                                <p className="text-gray-700 text-sm leading-relaxed">
+                                  {submission.message.length > 200 
+                                    ? `${submission.message.substring(0, 200)}...` 
+                                    : submission.message
+                                  }
+                                </p>
                               </div>
-                            )}
+                            </div>
                           </div>
-                        )}
+                        </div>
                       </div>
                     </div>
 
-                    <button
-                      onClick={() => setSelectedSubmission(
-                        selectedSubmission?.id === submission.id ? null : submission
-                      )}
-                      className="ml-4 p-2 text-gray-400 hover:text-gray-600 transition-colors duration-200"
-                    >
-                      {selectedSubmission?.id === submission.id ? <EyeOff size={20} /> : <Eye size={20} />}
-                    </button>
+                    <div className="flex items-center space-x-2 ml-4">
+                      <button
+                        onClick={() => setSelectedSubmission(
+                          selectedSubmission?.id === submission.id ? null : submission
+                        )}
+                        className="p-2 text-gray-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-all duration-200 group-hover:bg-white"
+                        title={selectedSubmission?.id === submission.id ? "Hide details" : "View details"}
+                      >
+                        {selectedSubmission?.id === submission.id ? <EyeOff size={18} /> : <Eye size={18} />}
+                      </button>
+                      <div className="w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center text-xs font-medium text-gray-600">
+                        {index + 1}
+                      </div>
+                    </div>
                   </div>
 
-                  {/* Expanded View */}
+                  {/* Enhanced Expanded View */}
                   {selectedSubmission?.id === submission.id && (
-                    <div className="mt-6 pt-6 border-t border-gray-200">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="mt-6 pt-6 border-t border-gray-200 bg-gradient-to-r from-gray-50/50 to-white rounded-xl p-6">
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         <div>
-                          <h4 className="font-semibold text-secondary-900 mb-3">Additional Details</h4>
-                          <div className="space-y-2 text-sm">
-                            <div className="flex justify-between">
-                              <span className="text-secondary-600">Budget:</span>
-                              <span className="text-secondary-900">{submission.budget || 'Not specified'}</span>
+                          <div className="flex items-center space-x-2 mb-4">
+                            <div className="w-6 h-6 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+                              <MoreVertical className="text-white" size={12} />
                             </div>
-                            <div className="flex justify-between">
-                              <span className="text-secondary-600">Timeline:</span>
-                              <span className="text-secondary-900">{submission.timeline || 'Not specified'}</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span className="text-secondary-600">Revenue:</span>
-                              <span className="text-secondary-900">{submission.revenue || 'Not specified'}</span>
-                            </div>
+                            <h4 className="font-semibold text-gray-900">Additional Details</h4>
+                          </div>
+                          <div className="space-y-3">
+                            {[
+                              { label: 'Budget', value: submission.budget },
+                              { label: 'Timeline', value: submission.timeline },
+                              { label: 'Revenue', value: submission.revenue }
+                            ].map((item, idx) => (
+                              <div key={idx} className="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-100">
+                                <span className="text-sm font-medium text-gray-600">{item.label}:</span>
+                                <span className="text-sm text-gray-900 font-medium">
+                                  {item.value || 'Not specified'}
+                                </span>
+                              </div>
+                            ))}
                           </div>
                         </div>
                         
                         <div>
-                          <h4 className="font-semibold text-secondary-900 mb-3">Full Message</h4>
-                          <div className="bg-gray-50 rounded-lg p-4">
-                            <p className="text-sm text-secondary-700 leading-relaxed whitespace-pre-wrap">
+                          <div className="flex items-center space-x-2 mb-4">
+                            <div className="w-6 h-6 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center">
+                              <MessageSquare className="text-white" size={12} />
+                            </div>
+                            <h4 className="font-semibold text-gray-900">Complete Message</h4>
+                          </div>
+                          <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
+                            <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
                               {submission.message}
                             </p>
                           </div>

@@ -63,6 +63,14 @@
   .text-gradient-secondary {
     @apply bg-gradient-to-r from-primary-500 to-primary-700 bg-clip-text text-transparent;
   }
+
+  .hero-text-shadow {
+    text-shadow: 0 4px 8px rgba(0,0,0,0.5), 0 0 16px rgba(0,0,0,0.3);
+  }
+
+  .hero-text-shadow-secondary {
+    text-shadow: 0 4px 8px rgba(0,0,0,0.6), 0 0 20px rgba(37, 99, 235, 0.4);
+  }
   
   .glass-card {
     @apply bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl;
@@ -72,49 +80,6 @@
     @apply bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-primary-200 transform hover:-translate-y-2;
   }
 
-  .page-enter {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  
-  .page-enter-active {
-    opacity: 1;
-    transform: translateY(0);
-    transition: opacity 300ms ease-in-out, transform 300ms ease-in-out;
-  }
-  
-  .page-exit {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  
-  .page-exit-active {
-    opacity: 0;
-    transform: translateY(-20px);
-    transition: opacity 300ms ease-in-out, transform 300ms ease-in-out;
-  }
-
-  .menu-slide-enter {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  
-  .menu-slide-enter-active {
-    opacity: 1;
-    transform: translateY(0);
-    transition: opacity 200ms ease-out, transform 200ms ease-out;
-  }
-  
-  .menu-slide-exit {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  
-  .menu-slide-exit-active {
-    opacity: 0;
-    transform: translateY(-10px);
-    transition: opacity 200ms ease-in, transform 200ms ease-in;
-  }
 }
 
 /* Mobile Viewport Height Fixes */
@@ -198,11 +163,6 @@ body {
   box-sizing: border-box;
 }
 
-/* Container overflow protection */
-.section-container {
-  overflow-x: hidden;
-  overflow-y: visible;
-}
 
 /* Prevent temporary scrollbars during animations */
 section {
@@ -213,12 +173,9 @@ section {
   overflow: visible !important;
 }
 
-/* Force all containers to prevent scrollbars */
-.section-container,
-.modern-card,
-div[class*="transition-"],
-div[class*="opacity-"] {
-  overflow: visible !important;
+/* Prevent scrollbars on key containers */
+.section-container {
+  overflow-x: hidden;
 }
 
 /* Animation performance improvements */
@@ -273,45 +230,21 @@ div[class*="opacity-"] {
   backface-visibility: hidden;
 }
 
-/* Force stable layout during animations */
-[class*="translate-y-"] {
-  transform: translateY(0) !important;
-}
 
 /* Mobile optimizations - disable problematic animations */
 @media (max-width: 768px) {
+  /* Reduce motion for mobile users */
   .animate-float {
-    animation-duration: 4s;
-  }
-  
-  /* Disable all Y transforms on mobile to prevent scrollbars */
-  [class*="translate-y-"],
-  .transition-all {
-    transform: translateY(0) !important;
-    transition: opacity 0.6s ease-out !important;
+    animation-duration: 8s;
   }
 }
 
-/* Nuclear option - disable ALL transforms that could cause scrollbars */
-* {
-  transform: none !important;
-}
-
-/* Allow only safe transforms */
+/* Safe hover transforms only */
 .hover\:scale-105:hover,
 .hover\:scale-\[1\.02\]:hover,
 .group-hover\:scale-110,
 .group-hover\:scale-105 {
   transform: scale(1.02) !important;
-}
-
-/* Keep essential animations but prevent scrollbars */
-.animate-bounce-slow {
-  animation: none !important;
-}
-
-.animate-float {
-  animation: none !important;
 }
 
 /* Text overflow fixes */

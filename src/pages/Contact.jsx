@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Mail, MapPin, Clock, Send, CheckCircle, Upload, X, AlertCircle, Loader2 } from 'lucide-react'
-import { uploadFiles } from '../lib/fileUpload'
+import { Mail, MapPin, Clock, Send, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
 import { logger } from '../lib/logger'
 
 const Contact = () => {
@@ -18,7 +17,6 @@ const Contact = () => {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [submitError, setSubmitError] = useState('')
-  const [uploadedFiles, setUploadedFiles] = useState([])
   const [formProgress, setFormProgress] = useState(0)
 
   // Auto-save to localStorage
@@ -53,24 +51,6 @@ const Contact = () => {
     if (submitError) setSubmitError('')
   }
 
-  const handleFileUpload = (e) => {
-    const files = Array.from(e.target.files)
-    const maxSize = 10 * 1024 * 1024 // 10MB
-    
-    const validFiles = files.filter(file => {
-      if (file.size > maxSize) {
-        setSubmitError(`File ${file.name} is too large. Maximum size is 10MB.`)
-        return false
-      }
-      return true
-    })
-
-    setUploadedFiles([...uploadedFiles, ...validFiles])
-  }
-
-  const removeFile = (index) => {
-    setUploadedFiles(uploadedFiles.filter((_, i) => i !== index))
-  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -89,19 +69,6 @@ const Contact = () => {
         throw new Error('Please enter a valid email address.')
       }
 
-      // Generate unique submission ID
-      const submissionId = `sub_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
-
-      // Upload files first (if any)
-      let uploadedFileData = []
-      if (uploadedFiles.length > 0) {
-        try {
-          uploadedFileData = await uploadFiles(uploadedFiles, submissionId)
-        } catch (uploadError) {
-          throw new Error(`File upload failed: ${uploadError.message}`)
-        }
-      }
-
       // Prepare submission data
       const submissionData = {
         name: formData.name.trim(),
@@ -112,31 +79,22 @@ const Contact = () => {
         timeline: formData.timeline || null,
         revenue: formData.revenue || null,
         message: formData.message.trim(),
-        created_at: new Date().toISOString(),
-        files_count: uploadedFiles.length,
-        files_data: uploadedFileData.length > 0 ? JSON.stringify(uploadedFileData) : null
+        created_at: new Date().toISOString()
       }
 
-      // Submit to Supabase
+      // Submit to Firestore
       try {
-        const { getSupabase } = await import('../lib/supabase')
-        const supabase = getSupabase()
+        const { collection, addDoc } = await import('firebase/firestore')
+        const { db } = await import('../lib/firebase')
         
-        if (!supabase) {
-          throw new Error('Database not configured. Please contact support.')
-        }
+        const docRef = await addDoc(collection(db, 'contact_submissions'), submissionData)
         
-        const result = await supabase
-          .from('contact_submissions')
-          .insert([submissionData])
-          .select()
-
-        if (result.error) {
-          throw new Error(result.error.message || 'Failed to submit form. Please try again.')
+        if (docRef.id) {
+          // Form submitted successfully
         }
-      } catch (supabaseError) {
-        logger.error('Supabase submission failed:', supabaseError)
-        // For now, just log the data and show success (temporary fallback)
+      } catch (firestoreError) {
+        logger.error('Firestore submission failed:', firestoreError)
+        throw firestoreError
       }
       setIsSubmitted(true)
       
@@ -153,7 +111,6 @@ const Contact = () => {
           revenue: '',
           message: ''
         })
-        setUploadedFiles([])
         localStorage.removeItem('contactFormData')
       }, 5000)
       
@@ -327,58 +284,6 @@ const Contact = () => {
                     </div>
                   </div>
 
-                  {/* File Upload Section */}
-                  <div>
-                    <label className="block text-sm font-medium text-secondary-700 mb-2">
-                      Attachments (Optional)
-                    </label>
-                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 hover:border-primary-400 transition-colors duration-200">
-                      <input
-                        type="file"
-                        multiple
-                        onChange={handleFileUpload}
-                        className="hidden"
-                        id="file-upload"
-                        accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png"
-                      />
-                      <label
-                        htmlFor="file-upload"
-                        className="cursor-pointer flex flex-col items-center justify-center"
-                      >
-                        <Upload className="text-gray-400 mb-2" size={32} />
-                        <p className="text-gray-600 text-sm text-center">
-                          <span className="font-medium text-primary-600">Click to upload</span> or drag and drop
-                        </p>
-                        <p className="text-xs text-gray-500 mt-1">
-                          PDF, DOC, TXT, JPG, PNG up to 10MB each
-                        </p>
-                      </label>
-                    </div>
-                    
-                    {uploadedFiles.length > 0 && (
-                      <div className="mt-4 space-y-2">
-                        <p className="text-sm font-medium text-secondary-700">Uploaded files:</p>
-                        {uploadedFiles.map((file, index) => (
-                          <div key={index} className="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
-                            <div className="flex items-center">
-                              <Upload className="text-primary-600 mr-2" size={16} />
-                              <span className="text-sm text-secondary-700">{file.name}</span>
-                              <span className="text-xs text-gray-500 ml-2">
-                                ({(file.size / 1024 / 1024).toFixed(2)} MB)
-                              </span>
-                            </div>
-                            <button
-                              type="button"
-                              onClick={() => removeFile(index)}
-                              className="text-red-500 hover:text-red-700 transition-colors duration-200"
-                            >
-                              <X size={16} />
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
 
                   <div>
                     <label htmlFor="message" className="block text-sm font-medium text-secondary-700 mb-2">

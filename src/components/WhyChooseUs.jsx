@@ -1,6 +1,7 @@
+import { memo } from 'react'
+import { Link } from 'react-router-dom'
 import { Shield, Zap, Users, Award } from 'lucide-react'
 import { useScrollAnimation } from '../hooks/useScrollAnimation'
-import { Link } from 'react-router-dom'
 
 const WhyChooseUs = () => {
   const [ref, isVisible] = useScrollAnimation(0.2)
@@ -83,4 +84,4 @@ const WhyChooseUs = () => {
   )
 }
 
-export default WhyChooseUs
+export default memo(WhyChooseUs)

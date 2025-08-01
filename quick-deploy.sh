@@ -23,10 +23,17 @@ npm run build
 
 # Deploy
 echo "Deploying to $APACHE_ROOT..."
-sudo mkdir -p "$APACHE_ROOT"
-sudo cp -r "$BUILD_DIR"/* "$APACHE_ROOT"/
-sudo chown -R www-data:www-data "$APACHE_ROOT"
-sudo chmod -R 755 "$APACHE_ROOT"
+if command -v sudo &> /dev/null; then
+    sudo mkdir -p "$APACHE_ROOT"
+    sudo cp -r "$BUILD_DIR"/* "$APACHE_ROOT"/
+    sudo chown -R www-data:www-data "$APACHE_ROOT" 2>/dev/null || echo "Warning: Could not set www-data ownership"
+    sudo chmod -R 755 "$APACHE_ROOT" 2>/dev/null || echo "Warning: Could not set permissions"
+else
+    mkdir -p "$APACHE_ROOT"
+    cp -r "$BUILD_DIR"/* "$APACHE_ROOT"/
+    chown -R www-data:www-data "$APACHE_ROOT" 2>/dev/null || echo "Warning: Could not set www-data ownership"
+    chmod -R 755 "$APACHE_ROOT" 2>/dev/null || echo "Warning: Could not set permissions"
+fi
 
 echo -e "${GREEN}✅ Quick deployment complete!${NC}"
 echo "Files deployed to: $APACHE_ROOT"

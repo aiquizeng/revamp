@@ -59,14 +59,14 @@ check_prerequisites() {
         error "npm is not installed. Please install Node.js and npm first."
     fi
     
-    # Check if Apache directory exists
-    if [[ ! -d "/var/www/html" ]]; then
-        error "Apache web root /var/www/html does not exist."
-    fi
-    
-    # Check if we can write to Apache directory
-    if [[ ! -w "/var/www/html" ]]; then
-        error "Cannot write to /var/www/html. Please run with sudo or fix permissions."
+    # Check if Apache directory exists (optional)
+    if [[ -d "/var/www/html" ]]; then
+        # Check if we can write to Apache directory
+        if [[ ! -w "/var/www/html" ]]; then
+            warning "Cannot write to /var/www/html. May need sudo for deployment."
+        fi
+    else
+        warning "Apache web root /var/www/html does not exist. Deployment may fail."
     fi
     
     success "Prerequisites check passed"
@@ -231,7 +231,9 @@ deploy_to_apache() {
     log "Deploying to Apache server..."
     
     # Create Apache directory if it doesn't exist
-    mkdir -p "$APACHE_ROOT"
+    if ! mkdir -p "$APACHE_ROOT" 2>/dev/null; then
+        error "Cannot create directory $APACHE_ROOT. Please run with sudo or check permissions."
+    fi
     
     # Copy build files to Apache directory
     if cp -r "$BUILD_DIR"/* "$APACHE_ROOT"/; then
@@ -242,8 +244,13 @@ deploy_to_apache() {
     
     # Set proper permissions
     log "Setting proper permissions..."
-    chown -R www-data:www-data "$APACHE_ROOT" 2>/dev/null || warning "Could not set www-data ownership (might need sudo)"
-    chmod -R 755 "$APACHE_ROOT"
+    if command -v sudo &> /dev/null && [[ $EUID -ne 0 ]]; then
+        sudo chown -R www-data:www-data "$APACHE_ROOT" 2>/dev/null || warning "Could not set www-data ownership"
+        sudo chmod -R 755 "$APACHE_ROOT" 2>/dev/null || warning "Could not set permissions"
+    else
+        chown -R www-data:www-data "$APACHE_ROOT" 2>/dev/null || warning "Could not set www-data ownership (might need sudo)"
+        chmod -R 755 "$APACHE_ROOT" 2>/dev/null || warning "Could not set permissions"
+    fi
     
     success "Permissions set"
 }

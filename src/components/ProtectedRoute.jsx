@@ -14,19 +14,18 @@ const ProtectedRoute = ({ children }) => {
       if (localAuth === 'true') {
         setIsAuthenticated(true)
       } else {
-        const { getSupabase } = await import('../lib/supabase')
-        const supabase = getSupabase()
+        const { onAuthStateChanged } = await import('firebase/auth')
+        const { auth } = await import('../lib/firebase')
         
-        if (supabase) {
-          const { data: { session } } = await supabase.auth.getSession()
-          if (session) {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+          if (user) {
             setIsAuthenticated(true)
           } else {
             navigate('/admin-login')
           }
-        } else {
-          navigate('/admin-login')
-        }
+        })
+        
+        return unsubscribe
       }
     } catch (error) {
       const localAuth = localStorage.getItem('isAuthenticated')

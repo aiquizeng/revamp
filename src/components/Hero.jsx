@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { HiArrowNarrowRight } from 'react-icons/hi'
+import { ArrowRight } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 const Hero = () => {
@@ -49,10 +49,10 @@ const Hero = () => {
           <h1 className={`text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black leading-[1.1] mb-4 xs:mb-6 sm:mb-8 px-1 transition-all duration-1000 ${
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}>
-            <span className="block text-white drop-shadow-2xl transition-all duration-1000 delay-200" style={{ textShadow: '0 4px 8px rgba(0,0,0,0.5), 0 0 16px rgba(0,0,0,0.3)' }}>Digital Solutions</span>
-            <span className={`block transition-all duration-1000 delay-400 text-primary-200 font-black ${
+            <span className="block text-white drop-shadow-2xl transition-all duration-1000 delay-200 hero-text-shadow">Digital Solutions</span>
+            <span className={`block transition-all duration-1000 delay-400 text-primary-200 font-black hero-text-shadow-secondary ${
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-            }`} style={{ textShadow: '0 4px 8px rgba(0,0,0,0.6), 0 0 20px rgba(37, 99, 235, 0.4)' }}>
+            }`}>
               That Transform
             </span>
           </h1>
@@ -71,12 +71,12 @@ const Hero = () => {
               className="btn-primary group w-full xs:w-auto"
             >
               <span>Get Started Today</span>
-              <HiArrowNarrowRight size={20} className="ml-2 flex-shrink-0 transition-transform duration-300 group-hover:translate-x-2" />
+              <ArrowRight size={20} className="ml-2 flex-shrink-0 transition-transform duration-300 group-hover:translate-x-2" />
             </Link>
           </div>
           
           {/* Stats or trust indicators */}
-          <div className={`mt-6 xs:mt-8 sm:mt-12 md:mt-16 grid grid-cols-1 xs:grid-cols-3 gap-2 xs:gap-3 sm:gap-4 md:gap-8 max-w-4xl mx-auto px-3 xs:px-4 sm:px-2 transition-all duration-1000 delay-1000 ${
+          <div className={`mt-6 xs:mt-8 sm:mt-12 md:mt-16 grid grid-cols-1 xs:grid-cols-3 gap-2 xs:gap-3 sm:gap-4 md:gap-8 max-w-xs xs:max-w-4xl mx-auto px-3 xs:px-4 sm:px-2 transition-all duration-1000 delay-1000 ${
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}>
             <div className="bg-white/15 backdrop-blur-md border border-white/30 rounded-xl shadow-2xl p-2.5 xs:p-3 sm:p-4 md:p-6 text-center hover:bg-white/20 transition-all duration-300">
@@ -89,7 +89,7 @@ const Hero = () => {
             </div>
             <div className="bg-white/15 backdrop-blur-md border border-white/30 rounded-xl shadow-2xl p-2.5 xs:p-3 sm:p-4 md:p-6 text-center hover:bg-white/20 transition-all duration-300">
               <div className="text-base xs:text-lg sm:text-xl md:text-2xl font-bold text-white mb-1 sm:mb-2 drop-shadow-lg">SEA+</div>
-              <div className="text-white/90 text-xs sm:text-sm font-medium">Serving Clients in SEA, APAC & MENA</div>
+              <div className="text-white/90 text-xs sm:text-sm font-medium">Serving Clients in SEA & MENA</div>
             </div>
           </div>
         </div>

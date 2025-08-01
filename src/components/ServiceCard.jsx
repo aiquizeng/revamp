@@ -17,7 +17,7 @@ const ServiceCard = ({ icon: Icon, title, description, features, roi }) => {
             {title}
           </h3>
           {roi && (
-            <div className="service-roi-badge bg-green-100 text-green-800 px-2 xs:px-3 py-1 rounded-full text-xs xs:text-sm font-bold self-start text-center leading-tight max-w-32 xs:max-w-none">
+            <div className="service-roi-badge bg-green-100 text-green-800 px-2 xs:px-3 py-1 rounded-full text-xs xs:text-sm font-bold self-start text-center leading-tight max-w-20 xs:max-w-32 sm:max-w-none overflow-hidden break-words">
               {roi}
             </div>
           )}
