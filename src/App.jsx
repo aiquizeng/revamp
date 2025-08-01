@@ -11,6 +11,8 @@ const Services = lazy(() => import('./pages/Services'))
 const About = lazy(() => import('./pages/About'))
 const Portfolio = lazy(() => import('./pages/Portfolio'))
 const Contact = lazy(() => import('./pages/Contact'))
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'))
+const TermsOfService = lazy(() => import('./pages/TermsOfService'))
 const Login = lazy(() => import('./pages/Login'))
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard'))
 
@@ -61,6 +63,16 @@ function App() {
       <Route path="/contact" element={
         <Layout>
           <Contact />
+        </Layout>
+      } />
+      <Route path="/privacy-policy" element={
+        <Layout>
+          <PrivacyPolicy />
+        </Layout>
+      } />
+      <Route path="/terms-of-service" element={
+        <Layout>
+          <TermsOfService />
         </Layout>
       } />
         </Routes>

@@ -105,10 +105,10 @@ const Footer = () => {
             © {currentYear} DigiCinta. All rights reserved.
           </p>
           <div className="flex space-x-6 mt-4 md:mt-0">
-            <Link to="#" className="text-secondary-400 hover:text-primary-400 text-sm transition-colors duration-200">
+            <Link to="/privacy-policy" className="text-secondary-400 hover:text-primary-400 text-sm transition-colors duration-200">
               Privacy Policy
             </Link>
-            <Link to="#" className="text-secondary-400 hover:text-primary-400 text-sm transition-colors duration-200">
+            <Link to="/terms-of-service" className="text-secondary-400 hover:text-primary-400 text-sm transition-colors duration-200">
               Terms of Service
             </Link>
           </div>
